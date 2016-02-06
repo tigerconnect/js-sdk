@@ -40,12 +40,10 @@ Before diving in into the different methods, it's important to know the model ty
 
 ### `User`
 
-#### Properties
-
 | Property        | Type      | Description                                    |
 |-----------------|-----------|------------------------------------------------|
 | `id`            | `string`  | ID                                             |
-| `displayName`   | `string`  | User's name to display                         |
+| `displayName`   | `string`  | User's display name                            |
 | `firstName`     | `?string` | First name                                     |
 | `lastName`      | `?string` | Last name                                      |
 | `status`        | `?string` | User's current status message                  |
@@ -55,7 +53,6 @@ Before diving in into the different methods, it's important to know the model ty
 
 ### `Organization`
 
-
 | Property        | Type                  | Description                                                                    |
 |-----------------|-----------------------|--------------------------------------------------------------------------------|
 | `id`            | `string`              | ID                                                                             |
@@ -63,6 +60,26 @@ Before diving in into the different methods, it's important to know the model ty
 | `memberCount`   | `int`                 | Number of members                                                              |
 | `conversations` | `Array<Conversation>` | List of active conversations in the org for the logged in user                 |
 | `unreadCount`   | `int`                 | A sum of all unread message counts in all conversations in the organization    |
+
+
+### `Group`
+
+| Property          | Type                  | Description                                                                    |
+|-------------------|-----------------------|--------------------------------------------------------------------------------|
+| `id`              | `string`              | ID                                                                             |
+| `name`            | `string`              | Group name                                                                     |
+| `displayName`     | `string`              | Same as `name`                                                                 |
+| `description`     | `?string`             | Group description                                                              |
+| `members`         | `Array<User>`         | List of users in this group.                                                   |
+| `memberIds`       | `Array<string>`       | IDs of `members`                                                               |
+| `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
+| `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
+| `groupType`       | `?string`             | `GROUP`, `ROOM`, `DISTRIBUTION_LIST`                                           |
+| `organization`    | `Organization`        | Organization where this conversation takes place                               |
+| `organizationId`  | `string`              | ID of `organization`                                                           |
+| `createdTime`     | `string`              | ISO date and time of creation                                                  |
+
+
 
 ### `Message`
 
@@ -86,12 +103,13 @@ Before diving in into the different methods, it's important to know the model ty
 | `senderOrganizationId`     | `string`                           | ID of `senderOrganization `                                                |
 | `ttl`                      | `int`                              | Time to live in seconds                                                    |
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                          |
-| `createdAt`                | `string`                           | ISO date string                                                            |
+| `createdAt`                | `string`                           | ISO date and time of creation                                              |
 | `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                          |
 | `data`                     | `Array<Object>`                    | Array of metadata objects on a message                                     |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
 | `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
 | `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message |
+
 
 ### `MessageStatusPerRecipient`
 
@@ -118,6 +136,7 @@ Before diving in into the different methods, it's important to know the model ty
 | `counterPartyId`    | `string`          | ID of `counterParty`                                                              |
 | `counterPartyType`  | `string`          | Values: `user`, `group`                                                           |
 | `organization`      | `Organization`    | Organization where this conversation takes place                                  |
+| `organizationId`    | `string`          | ID of `organization`                                                              |
 
 
 
@@ -180,6 +199,22 @@ client.authenticate('c96049e39f883e2', '2ee8bff8cb41').then(function (user) {
 })
 ```
 
+### `client.getCurrentUser`
+
+Retrieves current authenticated user.
+
+
+```js
+client.getCurrentUser():User
+```
+
+#### Example
+
+```js
+console.log('Signed in as ', client.getCurrentUser().displayName)
+```
+
+
 ### `client.signOut`
 
 Signs a user out and clears all data.
@@ -198,18 +233,188 @@ client.signOut().then(function () {
 
 ## Events
 
+### `client.events.connect`
+
+After a successful sign in, this will connect the client to the server's event stream.
+
+When event stream opens for the first time for a user, all message hisory downloads.
+
+### `client.events.disconnect`
+
+Disconnect from event stream. Called automatically on sign out.
+
+### Listening to messages
+
+After connecting to event stream, the `message` events fires on each new message. If the user is connected on multiple devices, this event will fire also on sent messages from other devices.
+
+```js
+client.on('message', function (message) {
+  console.log(
+    'message event',
+    message.sender.displayName,
+    'to',
+    message.recipient.displayName,
+    ':',
+    message.body
+  )
+})
+```
+
 
 ## Users
+
+### `client.users.find`
+
+Retrieves a user from server by ID, email or phone number.
+
+```js
+client.users.find(id: string):Promise.<User,Error>
+```
+
+#### Example
+
+```js
+client.users.find('some-user-id').then(function () {
+  console.log('Signed out successfully')
+}, function (err) {
+  if (err.code == 'not-found') {
+    console.log('User not found')
+  }
+})
+```
 
 
 ## Messages
 
+### `client.messages.sendToUser`
+
+Sends a message to a user (1 on 1 message)
+
+```js
+client.messages.sendToUser(
+  userId: string|User, // can also be a phone number or an email address
+  body: string,
+  {
+    senderOrganizationId: string,
+    recipientOrganizationId: ?string // default = senderOrganizationId
+  }
+):Promise.<Message,Error>
+```
+
+#### Example
+
+```js
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  { senderOrganizationId: 'some-org-id' }
+).then(function (message) {
+  console.log('sent', message.body, 'to', message.recipient.displayName)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+### `client.messages.sendToGroup`
+
+Sends a message to a group
+
+```js
+client.messages.sendToGroup(
+  groupId: string|Group,
+  body: string,
+  {
+    organizationId: ?string
+  }
+):Promise.<Message,Error>
+```
+
+#### Example
+
+```js
+client.messages.sendToGroup(
+  'some-group-id',
+  'hello!',
+  { organizationId: 'some-org-id' }
+).then(function (message) {
+  console.log('sent', message.body, 'to', message.recipient.displayName)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+### `client.messages.sendToNewGroup`
+
+Creates a new group with specified members and current user, and sends a message.
+
+```js
+client.messages.sendToNewGroup(
+  userIds: Array<string|User>,
+  body: string,
+  {
+    organizationId: string,
+    groupName: ?string,
+    groupMetadata: ?Object
+  }
+):Promise.<Message,Error>
+```
+
+#### Example
+
+```js
+client.messages.sendToNewGroup(
+  [
+    'some-user-id-1',
+    'some-user-id-2',
+    'some-user-id-3',
+  ]
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    groupName: 'The greatest group'
+  }
+).then(function (message) {
+  var group = message.group
+  console.log('created new group:', group.name, 'with members', group.members.map(function (user) { return user.displayName }).join(', '))
+  console.log('sent', message.body, 'to group', group.name)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+
+## Groups
+
+### `client.groups.create`
+### `client.groups.update`
+### `client.groups.find`
+### `client.groups.findAll`
+### `client.groups.destroy`
+### `client.groups.addMembers`
+### `client.groups.addMember`
+### `client.groups.removeMembers`
+### `client.groups.removeMember`
+
 
 ## Conversations
 
+### `client.conversations.findAll`
+
+
 ## Organizations
+
+### `client.organizations.findAll`
+### `client.organizations.find`
+
 
 ## Metadata
 
+### `client.metadata.fullUpdate`
+### `client.metadata.update`
+### `client.metadata.find`
+### `client.metadata.findMulti`
+
+
 ## Search
 
+### `client.search.search`
