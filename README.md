@@ -15,6 +15,8 @@ client.signIn('user@mail.com', 's3cr3t').then(function (session) {
   ).then(function (message) {
     console.log('sent', message.body, 'to', message.recipient.displayName)
   })
+
+  client.events.connect()
   
   client.on('message', function (message) {
     console.log(
