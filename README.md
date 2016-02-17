@@ -5,7 +5,7 @@
 ```js
 var client = new TigerConnectClient()
 
-client.signIn('user@mail.com', 's3cr3t').then(function (session) {
+client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(function (session) {
   console.log('Signed in as', session.user.displayName)
   
   client.messages.sendToUser(
