@@ -1,5 +1,15 @@
 # TigerConnect JS SDK
 
+This repository contains binary distributions of JS SDK released by [TigerConnect](http://tigertext.com/tigerconnect).
+
+If you have any questions, comments, or issues related to this repository then please contact the team by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
+
+## Overview
+
+The TigerConnect JS SDK provides a simple way to enhance your web applications with intelligent, secure messaging from TigerConnect
+
+In order to use the TigerConnect JS SDK you must be a registered developer. All aspects of this setup are covered in detail in the [TigerConnect Documentation](http://https://tigerconnect.readme.io/v2).
+
 ## Quick Example
 
 ```js
@@ -420,3 +430,11 @@ client.messages.sendToNewGroup(
 ## Search
 
 ### `client.search.search`
+
+## Contact
+
+If you have any questions please reach out to the TigerConnect team any time by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
+
+## License
+
+TigerConnect is licensed under our [Developer Terms of Use](http://www.tigertext.com/developer-terms-of-use/).
