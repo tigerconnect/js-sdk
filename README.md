@@ -91,8 +91,9 @@ Before diving in into the different methods, it's important to know the model ty
 | `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
 | `groupType`       | `?string`             | `GROUP`, `ROOM`, `DISTRIBUTION_LIST`                                           |
 | `organization`    | `Organization`        | Organization where this conversation takes place                               |
+| `conversation`    | `Conversation`        | The conversation of the group. Can be only one.                                |
 | `organizationId`  | `string`              | ID of `organization`                                                           |
-| `createdTime`     | `string`              | ISO date and time of creation                                                  |
+| `createdAt`       | `string`              | ISO date and time of creation                                                  |
 
 
 
@@ -729,10 +730,81 @@ client.search.query({
 
 ## Metadata
 
-### `client.metadata.fullUpdate`
-### `client.metadata.update`
-### `client.metadata.find`
+### `client.metadata.find `
+
+Retrieves metadata of an entity (supported entities - `Group`/`User`)
+
+```js
+client.metadata.find(id: string|Group|User):Promise.<Object,Error>
+```
+
+#### Example
+
+```js
+client.metadata.find('some-group-id').then(function (metadata) {
+  console.log('metadata for some-group-id is ', metadata)
+}, function (err) {
+  if (err.code === 'not-found') console.log('Entity not found')
+  else console.log('Error')
+})
+```
+
 ### `client.metadata.findMulti`
+
+Retrieves metadata of an multiple entities (supported entities - `Group`/`User`). Gets a list of IDs (or entities) and returns a map where keys are IDs and values are the metadata object.
+
+```js
+client.metadata.findMulti(id: string[]|Group[]|User[]):Promise.<Object,Error>
+```
+
+#### Example
+
+```js
+client.metadata.findMulti(['some-group-id', 'some-group-id-2', 'some-user-id']).then(function (map) {
+  console.log('metadata for some-group-id: ', map['some-group-id'])
+  console.log('metadata for some-group-id-2: ', map['some-group-id-2'])
+  console.log('metadata for some-user-id: ', map['some-user-id'])
+})
+```
+
+### `client.metadata.update`
+
+Adds/updates metadata on an entity (partial update)
+
+```js
+client.metadata.update(id: string|Group|User):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.metadata.update('some-group-id', { 'new_key': 'new_value' }).then(function (entireData) {
+  console.log('metadata for some-group-id updated and is now: ', entireData)
+}, function (err) {
+  if (err.code === 'not-found') console.log('Entity not found')
+  else console.log('Error')
+})
+```
+
+
+### `client.metadata.fullUpdate`
+
+Overwrites the entire metadata of an entity
+
+```js
+client.metadata.fullUpdate(id: string|Group|User):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.metadata.fullUpdate('some-group-id', { 'new_key': 'new_value' }).then(function (newData) {
+  console.log('metadata for some-group-id set to', newData)
+}, function (err) {
+  if (err.code === 'not-found') console.log('Entity not found')
+  else console.log('Error')
+})
+```
 
 
 ## Contact
