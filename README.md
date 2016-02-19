@@ -13,15 +13,18 @@ In order to use the TigerConnect JS SDK you must be a registered developer. All 
 ## Quick Example
 
 ```js
-var client = new TigerConnectClient()
+var client = new TigerConnectClient({ defaultOrganizationId: 'some-org-id' })
 
 client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(function (session) {
+  onSignedIn(session)
+})
+
+function onSignedIn(session) {
   console.log('Signed in as', session.user.displayName)
   
   client.messages.sendToUser(
     'someone@mail.com',
-    'hello!',
-    { senderOrganizationId: 'some-org-id' }
+    'hello!'
   ).then(function (message) {
     console.log('sent', message.body, 'to', message.recipient.displayName)
   })
@@ -38,7 +41,7 @@ client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(func
       message.body
     )
   })
-})
+}
 ```
 
 
@@ -272,12 +275,26 @@ client.on('message', function (message) {
 })
 ```
 
+### Listening to conversation changes
+
+Whenever a conversation changes, the `conversation:change` is fired. The change can be anything, and isn't specified in the event. Examples for changes: new message, message recalled, `lastMessage` changed, message status changed, `unreadCount` changed etc.
+
+```js
+client.on('conversation:change', function (conversation) {
+  console.log(
+    'conversation with',
+    conversation.counterParty.displayName,
+    'changed'
+  )
+})
+```
+
 
 ## Users
 
 ### `client.users.find`
 
-Retrieves a user from server by ID, email or phone number.
+Retrieves a `User` by ID, email or phone number.
 
 ```js
 client.users.find(id: string):Promise.<User,Error>
@@ -286,12 +303,11 @@ client.users.find(id: string):Promise.<User,Error>
 #### Example
 
 ```js
-client.users.find('some-user-id').then(function () {
-  console.log('Signed out successfully')
+client.users.find('some-user-id').then(function (user) {
+  console.log('found user', user.displayName)
 }, function (err) {
-  if (err.code == 'not-found') {
-    console.log('User not found')
-  }
+  if (err.code == 'not-found') console.log('User not found')
+  else console.log('Error')
 })
 ```
 
@@ -307,19 +323,39 @@ client.messages.sendToUser(
   userId: string|User, // can also be a phone number or an email address
   body: string,
   {
-    senderOrganizationId: string,
-    recipientOrganizationId: ?string // default = senderOrganizationId
+    organizationId: string,
+
+    // if sender organizationId is different than recipient's
+    senderOrganizationId: string, // defaults to organizationId
+    recipientOrganizationId: ?string // defaults to senderOrganizationId
   }
 ):Promise.<Message,Error>
 ```
 
-#### Example
+#### Examples
+
+##### Specifying `defaultOrganizationId` on client
+
+```js
+var client = new TigerConnectClient({ defaultOrganizationId: 'some-org-id' })
+
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+).then(function (message) {
+  console.log('sent', message.body, 'to', message.recipient.displayName)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+##### Specifying `organizationId` in the method
 
 ```js
 client.messages.sendToUser(
   'some-user-id',
   'hello!',
-  { senderOrganizationId: 'some-org-id' }
+  { organizationId: 'some-org-id' }
 ).then(function (message) {
   console.log('sent', message.body, 'to', message.recipient.displayName)
 }, function (err) {
@@ -329,7 +365,7 @@ client.messages.sendToUser(
 
 ### `client.messages.sendToGroup`
 
-Sends a message to a group
+Sends a message to a group. If `groupId` is sent as an actual `Group` instance, `organizationId` is not required, as a group already carries an `organizationId`.
 
 ```js
 client.messages.sendToGroup(
@@ -387,10 +423,40 @@ client.messages.sendToNewGroup(
   }
 ).then(function (message) {
   var group = message.group
-  console.log('created new group:', group.name, 'with members', group.members.map(function (user) { return user.displayName }).join(', '))
+  console.log(
+    'created new group:',
+    group.name,
+    'with members',
+    group.members.map(function (user) { return user.displayName }).join(', ')
+  )
   console.log('sent', message.body, 'to group', group.name)
 }, function (err) {
   console.log('Error sending message')
+})
+```
+
+### `client.messages.recall`
+
+Lets current user recall their own message.
+
+```js
+client.messages.recall(
+  groupId: string|Group,
+  body: string,
+  {
+    organizationId: ?string
+  }
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.messages.recall('some-message-id').then(function () {
+  console.log('message recalled!')
+}, function (err) {
+  if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
+  else console.log('Error recalling message')
 })
 ```
 
@@ -398,25 +464,267 @@ client.messages.sendToNewGroup(
 ## Groups
 
 ### `client.groups.create`
+
+Creates a new group with specified members and current user.
+
+```js
+client.groups.create({
+  organizationId: string,
+  name: string,
+  memberIds: Array<User|string>,
+  replayHistory = true,
+  metadata: ?Object
+}):Promise.<Group,Error>
+```
+
+#### Example
+
+```js
+client.groups.create({
+  organizationId: 'some-org-id',
+  name: 'The greatest group'
+  memberIds: [
+    'some-user-id-1',
+    'some-user-id-2',
+    'some-user-id-3',
+  ]
+}).then(function (group) {
+  console.log(
+    'created new group:', group.name,
+    'with members', group.members.map(function (user) { return user.displayName }).join(', ')
+  )
+}, function (err) {
+  console.log('Error creating group')
+})
+```
+
 ### `client.groups.update`
+
+Updates an existing group. Always appending the current user to the group `memberIds` even when edited.
+
+```js
+client.groups.update({
+  name: string,
+  memberIds: Array<User|string>,
+  replayHistory: bool = true,
+  metadata: ?Object
+}):Promise.<Group,Error>
+```
+
+#### Example
+
+```js
+client.groups.create({
+  organizationId: 'some-org-id',
+  name: 'A group',
+  memberIds: ['some-user-id-1', 'some-user-id-2']
+}).then(function (group) {
+
+	client.groups.update({
+	  name: 'A new name for the group',
+	  memberIds: ['some-user-id-1', 'some-user-id-2', 'some-user-id-3']
+	}).then(function (group) {
+	  console.log(
+	    'group updated:', group.name,
+	    'members: ', group.members.map(function (user) { return user.displayName }).join(', ')
+	  )
+	})
+}, function (err) {
+  console.log('Error creating group')
+})
+```
+
 ### `client.groups.find`
+
+Retrieves a `Group` by ID.
+
+```js
+client.groups.find(id: string):Promise.<Group,Error>
+```
+
+#### Example
+
+```js
+client.groups.find('some-group-id').then(function (group) {
+  console.log('found group', group.name)
+}, function (err) {
+  if (err.code === 'not-found') console.log('Group not found')
+  else console.log('Error')
+})
+```
+
 ### `client.groups.findAll`
+
+Retrieves all `Group`s of current user. Uses the search API behind the scenes.
+
+`includeMembers: true` will also fetch all the users from the server
+
+`includeMetadata: true` will also fetch all the metadata for the groups
+
+```js
+client.groups.findAll({ includeMetadata: bool, includeMembers: bool }):Promise.<Group[],Error>
+```
+
+#### Example
+
+```js
+client.groups.findAll({ includeMembers: true }).then(function (allGroups) {
+  console.log('found', allGroups.length, 'groups')
+  allGroups.forEach(function (group) {
+    console.log(group.name, group.members.map(function (user) { return user.displayName }).join(', '))
+  })
+})
+```
+
 ### `client.groups.destroy`
-### `client.groups.addMembers`
-### `client.groups.addMember`
-### `client.groups.removeMembers`
-### `client.groups.removeMember`
+
+Deleted a group
+
+```js
+client.groups.destroy(groupId: string|Group):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.groups.destroy('some-group-id').then(function () {
+  console.log('deleted group')
+})
+```
+
+### Group Member Management
+
+Add/remove member(s) from a group
+
+```js
+client.groups.addMember(groupId: string|Group, memberIds: string|User)
+client.groups.addMembers(groupId: string|Group, memberIds: string[]|User[])
+client.groups.removeMember(groupId: string|Group, memberIds: string|User)
+client.groups.removeMembers(groupId: string|Group, memberIds: string[]|User[])
+```
+
+#### Example
+
+```js
+client.groups.addMembers('some-group-id', ['some-user-5', 'some-user-6']).then(function () {
+  console.log('added!')
+})
+
+client.groups.removeMembers('some-group-id', ['some-user-7', 'some-user-8']).then(function () {
+  console.log('removed!')
+})
+```
 
 
 ## Conversations
 
 ### `client.conversations.findAll`
 
+Retrieves all active `Conversation`s of current user.
+
+```js
+client.conversations.findAll():Promise.<Conversation[],Error>
+```
+
+#### Example
+
+```js
+client.conversations.findAll().then(function (conversations) {
+  console.log('found', conversations.length, 'conversations')
+  conversations.forEach(function (conversation) {
+  	 if (conversation.counterPartyType === 'user') {
+      console.log(
+        conversation.counterParty.displayName,
+      )
+  	 }
+  	 else if (conversation.counterPartyType == 'group') {
+      console.log(
+        conversation.counterParty.displayName,
+        'group, members:',
+        conversation.counterParty.members.map(function (user) { return user.displayName }).join(', ')
+      )
+  	 }
+  })
+})
+```
+
 
 ## Organizations
 
 ### `client.organizations.findAll`
+
+Retrieves all `Organization`s of current user
+
+```js
+client.organizations.findAll():Promise.<Organization[],Error>
+```
+
+#### Example
+
+```js
+client.organizations.findAll().then(function (organizations) {
+  console.log(
+    'found', organizations.length, 'organizations:',
+    organizations.map(function (organization) { return organization.name }).join(', ')
+  )
+})
+```
+
 ### `client.organizations.find`
+
+Retrieves an `Organization` by ID.
+
+```js
+client.organizations.find(id: string):Promise.<Organization,Error>
+```
+
+#### Example
+
+```js
+client.organizations.find('some-organization-id').then(function (organization) {
+  console.log('found organization', organization.name)
+}, function (err) {
+  if (err.code === 'not-found') console.log('Organization not found')
+  else console.log('Error')
+})
+```
+
+## Search
+
+### `client.search.query`
+
+Retrieves search results by a query
+
+```js
+client.search.query({
+  types = [],
+  query = {},
+  continuation = null,
+  includeDisabled = false,
+  excludeTokens = [],
+  resultsFormat = 'entities', // or 'ids'
+  organizationId = null,
+  sort = [],
+  includeMetadata = false
+}):Promise.<Organization,Error>
+```
+
+#### Example
+
+```js
+client.search.query({
+  types: ['user', 'group'],
+  query: { displayName: 'al' },
+  organizationId: 'some-org-id'
+}).then(function (results) {
+  console.log('found', results.length, 'results')
+  results.forEach(function (result, i) {
+    console.log(i, result.entityType, result.entity.displayName)
+  })
+})
+```
+
+`includeMetadata: true` will also load all metadata for all entities, assigning them into each `result.metadata`
 
 
 ## Metadata
@@ -426,10 +734,6 @@ client.messages.sendToNewGroup(
 ### `client.metadata.find`
 ### `client.metadata.findMulti`
 
-
-## Search
-
-### `client.search.search`
 
 ## Contact
 
