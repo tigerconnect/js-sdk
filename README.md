@@ -109,7 +109,7 @@ Before diving in into the different methods, it's important to know the model ty
 | `recipientId`              | `?string`                          | ID of `recipient`                                                          |
 | `group`                    | `?Group`                           | In group messages - the Group which the message was sent to                |
 | `groupId`                  | `?string`                          | ID of `group`                                                              |
-| `counterParty`             | `User|Group`                       | Either the `recipient` or the `group` value, depends on the message type   |
+| `counterParty`             | `User/Group`                       | Either the `recipient` or the `group` value, depends on the message type   |
 | `counterPartyId`           | `string`                           | ID of `counterParty`                                                       |
 | `counterPartyType`         | `string`                           | Values: `user`, `group`                                                    |
 | `conversation`             | `Conversation`                     | The conversation which the message is on                                   |
@@ -148,7 +148,7 @@ Before diving in into the different methods, it's important to know the model ty
 | `unreadMessages`    | `Array<Message>`  | List of unread messages                                                           |
 | `unreadCount`       | `int`             | A count of all unread messages in the list                                        |
 | `lastMessage`       | `Message`         | The last message in the conversation (useful when showing a list of conversation) |
-| `counterParty`      | `User|Group`      | Either the `recipient` or the `group` value, depends on the conversation type     |
+| `counterParty`      | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type     |
 | `counterPartyId`    | `string`          | ID of `counterParty`                                                              |
 | `counterPartyType`  | `string`          | Values: `user`, `group`                                                           |
 | `organization`      | `Organization`    | Organization where this conversation takes place                                  |
