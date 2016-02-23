@@ -1,0 +1,30 @@
+{
+  "name": "tigerconnect",
+  "description": "JS (web and node) SDK for TigerText",
+  "main": "tigerconnect-sdk-web.min.js",
+  "authors": [
+    {
+      "name": "Elad Ossadon",
+      "email": "elad@tigertext.com",
+      "url": ""
+    }
+  ],
+  "license": {
+    "type": "Commercial",
+    "url": "http://www.tigertext.com/developer-terms-of-use/"
+  },
+  "keywords": [
+    "tigertext"
+  ],
+  "homepage": "https://github.com/tigerconnect/js-sdk-release",
+  "moduleType": [
+    "globals"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

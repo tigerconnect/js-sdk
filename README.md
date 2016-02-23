@@ -31,8 +31,8 @@ npm install --save tigerconnect
 ```
 
 ```js
-var TigerConnectClient = require('tigerconnect')
-var client = new TigerConnectClient(config)
+var TigerConnect = require('tigerconnect')
+var client = new TigerConnect.Client(config)
 ```
 
 
@@ -75,7 +75,7 @@ See code example in [the examples folder](examples).
 
 ## Client
 
-All communication with TigerConnect is performed with a single `TigerConnectClient ` instnace. The client can hold a single authenticated user, and will execute all commands on this user's behalf.
+All communication with TigerConnect is performed with a single `TigerConnect.Client ` instnace. The client can hold a single authenticated user, and will execute all commands on this user's behalf.
 
 ## Models
 
@@ -184,12 +184,12 @@ Before diving in into the different methods, it's important to know the model ty
 
 
 
-# TigerConnectClient
+# TigerConnect.Client
 
-Create an instance of `TigerConnectClient`:
+Create an instance of `TigerConnect.Client`:
 
 ```js
-var client = new TigerConnectClient(config)
+var client = new TigerConnect.Client(config)
 ```
 
 ## Authentication
@@ -366,7 +366,7 @@ client.messages.sendToUser(
 ##### Specifying `defaultOrganizationId` on client
 
 ```js
-var client = new TigerConnectClient({ defaultOrganizationId: 'some-org-id' })
+var client = new TigerConnect.Client({ defaultOrganizationId: 'some-org-id' })
 
 client.messages.sendToUser(
   'some-user-id',
