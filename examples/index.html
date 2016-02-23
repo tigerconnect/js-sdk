@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TigerConnect JS SDK Example</title>
+<script src="../releases/tigerconnect-sdk-web.latest.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<style>
+.well > h3:first-child { margin-top: 0; }
+pre { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>TigerConnect JS SDK Example</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well">
+        <h3>Sign In</h3>
+        <form id="signInForm">
+          <div class="form-group">
+            <label for="signInForm--userId">User ID</label>
+            <input type="text" class="form-control" id="signInForm--userId" placeholder="e@mail.com">
+          </div>
+          <div class="form-group">
+            <label for="signInForm--password">Password</label>
+            <input type="password" class="form-control" id="signInForm--password" placeholder="******">
+          </div>
+          <button type="submit" class="btn btn-default">Sign In</button>
+        </form>
+      </div>
+
+      <div id="signedIn" class="well" style="display: none">
+        <h3>Send a message</h3>
+        <form id="sendMessageForm">
+          <div class="form-group">
+            <label for="sendMessageForm--to">To</label>
+            <input type="text" class="form-control" id="sendMessageForm--to" placeholder="e@mail.com" value="echobot@tigertext.com">
+          </div>
+          <div class="form-group">
+            <label for="sendMessageForm--body">Body</label>
+            <textarea id="sendMessageForm--body" class="form-control" placeholder="Type a message...">Hello</textarea>
+          </div>
+          <button type="submit" class="btn btn-default">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <pre id="log"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+function uuid() {return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);return v.toString(16)})}
+
+var $log = $('#log')
+
+function log() {
+  var text = [].slice.apply(arguments).join(' ') + '\n'
+  $log.append(text)
+  console.log.apply(console, arguments)
+}
+
+function logError() {
+  var text = [].slice.apply(arguments).join(' ') + '\n'
+  $('<span style="color: red">').text(text).appendTo($log)
+  console.log.apply(console, arguments)
+}
+
+function logClear() {
+  $log.empty()
+  console.clear()
+}
+
+var DEFAULT_ORGANIZATION_ID = 'UpM28mnfW65vJkbqEATtKvxm'
+
+var client = new TigerConnect.Client({ defaultOrganizationId: DEFAULT_ORGANIZATION_ID })
+
+$('#signInForm').submit(function (e) {
+  logClear()
+  log('Signing in...')
+
+  e.preventDefault()
+
+  var userId = $('#signInForm--userId').val()
+  var password = $('#signInForm--password').val()
+
+  client.signIn(userId, password, { udid: uuid() }).then(function (session) {
+    $('#signedIn').show()
+    onSignedIn(session)
+  }, function (err) {
+    $('#signedIn').hide()
+    logError('Error Signing in:', err.message || err.code)
+  })
+})
+
+function onSignedIn(session) {
+  log('Signed in as ', session.user.displayName)
+
+  client.events.connect()
+
+  client.on('message', function (message) {
+    log(
+      '>',
+      message.direction.toLowerCase(),
+      'message event:',
+      message.sender.displayName,
+      message.recipient ? 'to' : '',
+      message.recipient ? message.recipient.displayName : '',
+      '"' + message.body + '"'
+    )
+  })
+}
+
+$('#sendMessageForm').submit(function (e) {
+  e.preventDefault()
+
+  var to = $('#sendMessageForm--to').val()
+  var body = $('#sendMessageForm--body').val()
+
+  client.messages.sendToUser(to, body).then(function (message) {
+    log('sent', '"' + message.body + '"', 'to', message.recipient.displayName)
+  }, function (err) {
+    logError('Error sending message:', err.message || err.code)
+  })
+})
+</script>
+
+</body>
+</html>

@@ -44,6 +44,8 @@ function onSignedIn(session) {
 }
 ```
 
+See code example in [the examples folder](examples).
+
 
 ## Client
 
