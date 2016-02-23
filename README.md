@@ -1,7 +1,12 @@
+# TigerConnect JS SDK
+
+This repository contains binary distributions of JS SDK released by [TigerConnect](http://tigertext.com/tigerconnect).
+
+If you have any questions, comments, or issues related to this repository then please contact the team by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
+
 <!-- MarkdownTOC depth=2 autolink=true bracket=round -->
 
-- [TigerConnect JS SDK](#tigerconnect-js-sdk)
-  - [Overview](#overview)
+- [Overview](#overview)
   - [Installation](#installation)
   - [Quick Example](#quick-example)
   - [Client](#client)
@@ -20,12 +25,6 @@
   - [License](#license)
 
 <!-- /MarkdownTOC -->
-
-# TigerConnect JS SDK
-
-This repository contains binary distributions of JS SDK released by [TigerConnect](http://tigertext.com/tigerconnect).
-
-If you have any questions, comments, or issues related to this repository then please contact the team by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
 
 ## Overview
 
