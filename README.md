@@ -1,23 +1,23 @@
-<!-- MarkdownTOC depth=2 autolink=true -->
+<!-- MarkdownTOC depth=2 autolink=true bracket=round -->
 
-- [TigerConnect JS SDK][tigerconnect-js-sdk]
-  - [Overview][overview]
-  - [Installation][installation]
-  - [Quick Example][quick-example]
-  - [Client][client]
-  - [Models][models]
-- [TigerConnect.Client][tigerconnectclient]
-  - [Authentication][authentication]
-  - [Events][events]
-  - [Users][users]
-  - [Messages][messages]
-  - [Groups][groups]
-  - [Conversations][conversations]
-  - [Organizations][organizations]
-  - [Search][search]
-  - [Metadata][metadata]
-  - [Contact][contact]
-  - [License][license]
+- [TigerConnect JS SDK](#tigerconnect-js-sdk)
+  - [Overview](#overview)
+  - [Installation](#installation)
+  - [Quick Example](#quick-example)
+  - [Client](#client)
+  - [Models](#models)
+- [TigerConnect.Client](#tigerconnectclient)
+  - [Authentication](#authentication)
+  - [Events](#events)
+  - [Users](#users)
+  - [Messages](#messages)
+  - [Groups](#groups)
+  - [Conversations](#conversations)
+  - [Organizations](#organizations)
+  - [Search](#search)
+  - [Metadata](#metadata)
+  - [Contact](#contact)
+  - [License](#license)
 
 <!-- /MarkdownTOC -->
 
