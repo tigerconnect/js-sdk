@@ -1,3 +1,26 @@
+<!-- MarkdownTOC depth=2 autolink=true -->
+
+- [TigerConnect JS SDK][tigerconnect-js-sdk]
+  - [Overview][overview]
+  - [Installation][installation]
+  - [Quick Example][quick-example]
+  - [Client][client]
+  - [Models][models]
+- [TigerConnect.Client][tigerconnectclient]
+  - [Authentication][authentication]
+  - [Events][events]
+  - [Users][users]
+  - [Messages][messages]
+  - [Groups][groups]
+  - [Conversations][conversations]
+  - [Organizations][organizations]
+  - [Search][search]
+  - [Metadata][metadata]
+  - [Contact][contact]
+  - [License][license]
+
+<!-- /MarkdownTOC -->
+
 # TigerConnect JS SDK
 
 This repository contains binary distributions of JS SDK released by [TigerConnect](http://tigertext.com/tigerconnect).
@@ -12,16 +35,24 @@ In order to use the TigerConnect JS SDK you must be a registered developer. All 
 
 The SDK supports both web and node.js.
 
-## Installation and client instantiation
+## Installation
 
 ### Web
 
+#### Using [Bower](http://bower.io)
+
+```sh
+bower install --save tigerconnect
+```
+
+```html
+<script src="bower_components/tigerconnect/tigerconnect-sdk-web.min.js"></script>
+```
+
+Or, manually download [tigerconnect-sdk-web.min.js](https://raw.githubusercontent.com/tigerconnect/js-sdk-release/master/tigerconnect-sdk-web.min.js) and include it in a `script` tag:
+
 ```html
 <script src="path/to/tigerconnect-sdk-web.min.js"></script>
-
-<script>
-var client = new TigerConnect.Client(config)
-</script>
 ```
 
 ### Node
@@ -34,7 +65,6 @@ npm install --save tigerconnect
 var TigerConnect = require('tigerconnect')
 var client = new TigerConnect.Client(config)
 ```
-
 
 ## Quick Example
 
