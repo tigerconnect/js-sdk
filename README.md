@@ -12,7 +12,7 @@ In order to use the TigerConnect JS SDK you must be a registered developer. All 
 
 ## Quick Example
 
-```C#
+```js
 var client = new TigerConnectClient({ defaultOrganizationId: 'some-org-id' })
 
 client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(function (session) {
@@ -160,7 +160,7 @@ Before diving in into the different methods, it's important to know the model ty
 
 Create an instance of `TigerConnectClient`:
 
-```C#
+```js
 var client = new TigerConnectClient(config)
 ```
 
