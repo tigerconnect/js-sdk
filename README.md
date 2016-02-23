@@ -6,14 +6,40 @@ If you have any questions, comments, or issues related to this repository then p
 
 ## Overview
 
-The TigerConnect JS SDK provides a simple way to enhance your web applications with intelligent, secure messaging from TigerConnect
+The TigerConnect JS SDK provides a simple way to enhance your web applications with intelligent, secure messaging from TigerConnect.
 
 In order to use the TigerConnect JS SDK you must be a registered developer. All aspects of this setup are covered in detail in the [TigerConnect Documentation](https://tigerconnect.readme.io/).
+
+The SDK supports both web and node.js.
+
+## Installation and client instantiation
+
+### Web
+
+```html
+<script src="path/to/tigerconnect-sdk-web.min.js"></script>
+
+<script>
+var client = new TigerConnect.Client(config)
+</script>
+```
+
+### Node
+
+```sh
+npm install --save tigerconnect
+```
+
+```js
+var TigerConnectClient = require('tigerconnect')
+var client = new TigerConnectClient(config)
+```
+
 
 ## Quick Example
 
 ```js
-var client = new TigerConnectClient({ defaultOrganizationId: 'some-org-id' })
+var client = new TigerConnect.Client({ defaultOrganizationId: 'some-org-id' })
 
 client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(function (session) {
   onSignedIn(session)
