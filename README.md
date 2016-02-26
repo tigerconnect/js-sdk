@@ -4,23 +4,58 @@ This repository contains binary distributions of JS SDK released by [TigerConnec
 
 If you have any questions, comments, or issues related to this repository then please contact the team by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
 
-<!-- MarkdownTOC depth=2 autolink=true bracket=round -->
+<!-- MarkdownTOC depth=3 autolink=true bracket=round -->
 
 - [Overview](#overview)
   - [Installation](#installation)
+    - [Web](#web)
+    - [Node](#node)
   - [Quick Example](#quick-example)
   - [Client](#client)
   - [Models](#models)
+    - [`User`](#user)
+    - [`Organization`](#organization)
+    - [`Group`](#group)
+    - [`Message`](#message)
+    - [`MessageStatusPerRecipient`](#messagestatusperrecipient)
+    - [`Conversation`](#conversation)
 - [TigerConnect.Client](#tigerconnectclient)
   - [Authentication](#authentication)
+    - [`client.signIn`](#clientsignin)
+    - [`client.authenticate`](#clientauthenticate)
+    - [`client.getCurrentUser`](#clientgetcurrentuser)
+    - [`client.signOut`](#clientsignout)
   - [Events](#events)
+    - [`client.events.connect`](#clienteventsconnect)
+    - [`client.events.disconnect`](#clienteventsdisconnect)
+    - [Listening to messages](#listening-to-messages)
+    - [Listening to conversation changes](#listening-to-conversation-changes)
   - [Users](#users)
+    - [`client.users.find`](#clientusersfind)
   - [Messages](#messages)
+    - [`client.messages.sendToUser`](#clientmessagessendtouser)
+    - [`client.messages.sendToGroup`](#clientmessagessendtogroup)
+    - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
+    - [`client.messages.recall`](#clientmessagesrecall)
   - [Groups](#groups)
+    - [`client.groups.create`](#clientgroupscreate)
+    - [`client.groups.update`](#clientgroupsupdate)
+    - [`client.groups.find`](#clientgroupsfind)
+    - [`client.groups.findAll`](#clientgroupsfindall)
+    - [`client.groups.destroy`](#clientgroupsdestroy)
+    - [Group Member Management](#group-member-management)
   - [Conversations](#conversations)
+    - [`client.conversations.findAll`](#clientconversationsfindall)
   - [Organizations](#organizations)
+    - [`client.organizations.findAll`](#clientorganizationsfindall)
+    - [`client.organizations.find`](#clientorganizationsfind)
   - [Search](#search)
+    - [`client.search.query`](#clientsearchquery)
   - [Metadata](#metadata)
+    - [`client.metadata.find`](#clientmetadatafind)
+    - [`client.metadata.findMulti`](#clientmetadatafindmulti)
+    - [`client.metadata.update`](#clientmetadataupdate)
+    - [`client.metadata.fullUpdate`](#clientmetadatafullupdate)
   - [Contact](#contact)
   - [License](#license)
 
@@ -832,7 +867,7 @@ client.search.query({
 
 ## Metadata
 
-### `client.metadata.find `
+### `client.metadata.find`
 
 Retrieves metadata of an entity (supported entities - `Group`/`User`)
 
