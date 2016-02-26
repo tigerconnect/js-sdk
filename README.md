@@ -870,4 +870,4 @@ If you have any questions please reach out to the TigerConnect team any time by 
 
 ## License
 
-TigerConnect is licensed under our [Developer Terms of Use](http://www.tigertext.com/developer-terms-of-use/).
+TigerConnect is licensed under our [Developer Terms of Use](https://developer.tigertext.com/developer-terms-of-use/).
