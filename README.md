@@ -106,11 +106,18 @@ See code example in [the examples folder](examples).
 
 All communication with TigerConnect is performed with a single `TigerConnect.Client ` instnace. The client can hold a single authenticated user, and will execute all commands on this user's behalf.
 
+```js
+var client = new TigerConnect.Client()
+```
+
+
 ## Models
 
 Before diving in into the different methods, it's important to know the model types and relationships:
 
 ### `User`
+
+A user account
 
 | Property        | Type      | Description                                    |
 |-----------------|-----------|------------------------------------------------|
@@ -125,6 +132,8 @@ Before diving in into the different methods, it's important to know the model ty
 
 ### `Organization`
 
+An organization is a scope where messages are being sent. A user can be a member of multiple organizations, but messages that are being sent in organization #1 won't be visible at organization #2.
+
 | Property        | Type                  | Description                                                                    |
 |-----------------|-----------------------|--------------------------------------------------------------------------------|
 | `id`            | `string`              | ID                                                                             |
@@ -135,6 +144,8 @@ Before diving in into the different methods, it's important to know the model ty
 
 
 ### `Group`
+
+A group of users in a specific organization. Points to a single conversation.
 
 | Property          | Type                  | Description                                                                    |
 |-------------------|-----------------------|--------------------------------------------------------------------------------|
@@ -155,6 +166,8 @@ Before diving in into the different methods, it's important to know the model ty
 
 
 ### `Message`
+
+An incoming or outgoing message, can be a one on one or in a group conversation.
 
 | Property                   | Type                               | Description                                                                |
 |----------------------------|------------------------------------|----------------------------------------------------------------------------|
@@ -186,6 +199,8 @@ Before diving in into the different methods, it's important to know the model ty
 
 ### `MessageStatusPerRecipient`
 
+Message status (read/delivered recipts) per user. Used in group conversations where each user has a different status on each message.
+
 | Property          | Type      | Description                                    |
 |-------------------|-----------|------------------------------------------------|
 | `id`              | `string`  | ID                                             |
@@ -197,6 +212,8 @@ Before diving in into the different methods, it's important to know the model ty
 
 
 ### `Conversation`
+
+A collection of messages between current user and a counter party - a user or a group, within an organization.
 
 | Property            | Type              | Description                                                                       |
 |---------------------|-------------------|-----------------------------------------------------------------------------------|
@@ -219,6 +236,16 @@ Create an instance of `TigerConnect.Client`:
 
 ```js
 var client = new TigerConnect.Client(config)
+```
+
+##### Client optional Configuration and default values
+
+```js
+var client = new TigerConnect.Client({
+  defaultOrganizationId: null, // use the default org to send all messages in a specific organization unless specified otherwise
+  eventsFeatures: 'is-typing',
+  logLevel: 'error', // debug/info/warn/error/fatal
+})
 ```
 
 ## Authentication
