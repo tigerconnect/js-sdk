@@ -69,6 +69,8 @@ var client = new TigerConnect.Client(config)
 
 ## Quick Example
 
+This example shows how to initialize a client, sign in, listen to new messages and send a message:
+
 ```js
 var client = new TigerConnect.Client({ defaultOrganizationId: 'some-org-id' })
 
@@ -288,6 +290,8 @@ client.signIn(
 
 Signs a user in with key and secret.
 
+> **Important:** Do not use the key and secret generated for you to login to the web console.  Logging out with the JS SDK will invalidate the key and secret pair.  This method should only be used with dynamically generated keys and secrets granted to an administrator.
+
 ```js
 client.authenticate(
   key: string,
@@ -321,7 +325,7 @@ console.log('Signed in as ', client.getCurrentUser().displayName)
 
 ### `client.signOut`
 
-Signs a user out and clears all data.
+To stop receiving messages for a particular user and to cut off the connection with the server, be sure to sign out of the JS SDK.  While the platform does a good job of cleaning up open resources, it is always good housekeeping to sign out when the client does not want to show incoming messages:
 
 ```js
 client.signOut():Promise.<Null,Error>
@@ -341,11 +345,21 @@ client.signOut().then(function () {
 
 After a successful sign in, this will connect the client to the server's event stream.
 
-When event stream opens for the first time for a user, all message hisory downloads.
+When event stream opens for the first time for a user, all message hisory downloads. This may take a few seconds to complete if there is a large number of messages.
+
+Event stream contains entries about new messages, presence changes, read/deliverered recipts, group membership changes etc. The SDK takes care of all these events and applies the changes automatically to the internal data store, as long as the event stream is opened.
+
+```js
+client.events.connect().then(function () { console.log('listening to new events') })
+```
 
 ### `client.events.disconnect`
 
 Disconnect from event stream. Called automatically on sign out.
+
+```js
+client.events.disconnect()
+```
 
 ### Listening to messages
 
