@@ -106,6 +106,8 @@ See code example in [the examples folder](examples).
 
 All communication with TigerConnect is performed with a single `TigerConnect.Client ` instnace. The client can hold a single authenticated user, and will execute all commands on this user's behalf.
 
+Create a client:
+
 ```js
 var client = new TigerConnect.Client()
 ```
