@@ -48,7 +48,9 @@ bower install --save tigerconnect
 <script src="bower_components/tigerconnect/tigerconnect-sdk-web.min.js"></script>
 ```
 
-Or, manually download [tigerconnect-sdk-web.min.js](https://raw.githubusercontent.com/tigerconnect/js-sdk-release/master/tigerconnect-sdk-web.min.js) and include it in a `script` tag:
+#### Manual Include
+
+Download [tigerconnect-sdk-web.min.js](https://raw.githubusercontent.com/tigerconnect/js-sdk-release/master/tigerconnect-sdk-web.min.js) and include it in a `script` tag:
 
 ```html
 <script src="path/to/tigerconnect-sdk-web.min.js"></script>
