@@ -718,10 +718,10 @@ client.messages.downloadAttachmentURL(message.id, message.attachments[0].id).the
 
 ##### Node.js
 
-On web, use `client.messages.downloadAttachmentURL` to get a Base64 URL:
+On Node, use `client.messages.downloadAttachmentToFile` to download a file locally:
 
 ```js
-client.messages.downloadAttachmentURL(
+client.messages.downloadAttachmentToFile(
   messageId: string|Message,
   attachmentId: string,
   dest: string
