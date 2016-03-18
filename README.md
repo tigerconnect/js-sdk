@@ -17,6 +17,8 @@ If you have any questions, comments, or issues related to this repository then p
     - [`Organization`](#organization)
     - [`Group`](#group)
     - [`Message`](#message)
+    - [Attachment](#attachment)
+    - [MessageMetadata](#messagemetadata)
     - [`MessageStatusPerRecipient`](#messagestatusperrecipient)
     - [`Conversation`](#conversation)
 - [TigerConnect.Client](#tigerconnectclient)
@@ -35,7 +37,10 @@ If you have any questions, comments, or issues related to this repository then p
   - [Messages](#messages)
     - [`client.messages.sendToUser`](#clientmessagessendtouser)
     - [`client.messages.sendToGroup`](#clientmessagessendtogroup)
+    - [`client.messages.sendToConversation`](#clientmessagessendtoconversation)
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
+    - [Attachments](#attachments)
+    - [Message Metadata](#message-metadata)
     - [`client.messages.recall`](#clientmessagesrecall)
   - [Groups](#groups)
     - [`client.groups.create`](#clientgroupscreate)
@@ -232,10 +237,32 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                          |
 | `createdAt`                | `string`                           | ISO date and time of creation                                              |
 | `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                          |
-| `data`                     | `Array<Object>`                    | Array of metadata objects on a message                                     |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
 | `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
-| `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message |
+| `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message     |
+| `attachments`              | `Array<Attachment>`                | Array of attachments                                                       |
+| `metadata`                 | `Array<MessageMetadata>`           | Array of metadata objects on a message                                     |
+
+### Attachment
+
+File attachment on a message
+
+| Property          | Type      | Description                                    |
+|-------------------|-----------|------------------------------------------------|
+| `id`              | `string`  | ID                                             |
+| `name`            | `string`  | File name (e.g. `attachment.png`)              |
+| `contentType`     | `string`  | Content-Type of file (e.g. `image/png`)        |
+
+
+### MessageMetadata
+
+Metadata entry on a message
+
+| Property          | Type      | Description                                    |
+|-------------------|-----------|------------------------------------------------|
+| `namespace`       | `string`  | A custom namespace for this metadata entry     |
+| `payload`         | `Object`  | An object of the payload                       |
+| `mimetype`        | `string`  | Type of the data in the payload. `application/json` is converted automatically to an object.  |
 
 
 ### `MessageStatusPerRecipient`
@@ -465,7 +492,11 @@ client.messages.sendToUser(
 
     // if sender organizationId is different than recipient's
     senderOrganizationId: string, // defaults to organizationId
-    recipientOrganizationId: ?string // defaults to senderOrganizationId
+    recipientOrganizationId: ?string, // defaults to senderOrganizationId
+
+    metadata: ?Array<Object>|?Object,
+    attachmentFiles: ?Array<string|Object>,
+    attachmentFile: ?string|?Object
   }
 ):Promise.<Message,Error>
 ```
@@ -510,7 +541,10 @@ client.messages.sendToGroup(
   groupId: string|Group,
   body: string,
   {
-    organizationId: ?string
+    organizationId: ?string,
+    metadata: ?Array<Object>|?Object,
+    attachmentFiles: ?Array<string|Object>,
+    attachmentFile: ?string|?Object
   }
 ):Promise.<Message,Error>
 ```
@@ -529,6 +563,35 @@ client.messages.sendToGroup(
 })
 ```
 
+### `client.messages.sendToConversation`
+
+Sends a message to a conversation, and the conversation knows if it's a group or 1:1 conversation. Internally, uses `sendToUser` or `sendToGroup`.
+
+```js
+client.messages.sendToConversation(
+  conversationId: string|Conversation,
+  body: string,
+  {
+    metadata: ?Array<Object>|?Object,
+    attachmentFiles: ?Array<string|Object>,
+    attachmentFile: ?string|?Object
+  }
+):Promise.<Message,Error>
+```
+
+#### Example
+
+```js
+client.messages.sendToConversation(
+  'some-conversation-id',
+  'hello!'
+).then(function (message) {
+  console.log('sent', message.body, 'to', message.recipient.displayName)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
 ### `client.messages.sendToNewGroup`
 
 Creates a new group with specified members and current user, and sends a message.
@@ -540,7 +603,10 @@ client.messages.sendToNewGroup(
   {
     organizationId: string,
     groupName: ?string,
-    groupMetadata: ?Object
+    groupMetadata: ?Object,
+    metadata: ?Array<Object>|?Object,
+    attachmentFiles: ?Array<string|Object>,
+    attachmentFile: ?string|?Object
   }
 ):Promise.<Message,Error>
 ```
@@ -572,6 +638,142 @@ client.messages.sendToNewGroup(
   console.log('Error sending message')
 })
 ```
+
+### Attachments
+
+#### Sending an attachment
+
+All the `sendTo*` methods can also attach a file.  Sending an attachment is done with the `attachmentFiles` or `attachmentFile` keys. Currently only a single attachment per message is supported, so if using `attachmentFiles` array, make sure to send only a single entry.
+
+There's a slight difference between the web and the Node.js implementations:
+
+**Web**
+
+On the Web, `attachmentFile` takes an instance of `File`, which is available on an `<input type="file">` `files` collection.
+
+```js
+var file = inputFileReference.files[0]
+
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    attachmentFile: file
+  }
+).then(function (message) {
+  console.log('sent', message.body, 'with attachments', message.attachments)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+**Node.js**
+
+In Node, `attachmentFile` can be either an absolute path to a local file (a string), or a `Buffer` object, that can be obtained by `fs.readFile`/`fs.readFileSync`.
+
+```js
+var file = '/path/to/file.jpg'
+
+// or
+
+var file = fs.readFileSync('/path/to/file')
+
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    attachmentFile: file
+  }
+).then(function (message) {
+  console.log('sent', message.body, 'with attachments', message.attachments)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+#### Downloading an attachment
+
+##### Web
+
+On web, use `client.messages.downloadAttachmentURL` to get a Base64 URL:
+
+```js
+client.messages.downloadAttachmentURL(
+  messageId: string|Message,
+  attachmentId: string
+):Promise.<string,Error>
+```
+
+#### Example
+
+```js
+client.messages.downloadAttachmentURL(message.id, message.attachments[0].id).then(function (url) {
+  image.src = url
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
+##### Node.js
+
+On web, use `client.messages.downloadAttachmentURL` to get a Base64 URL:
+
+```js
+client.messages.downloadAttachmentURL(
+  messageId: string|Message,
+  attachmentId: string,
+  dest: string
+):Promise.<string,Error>
+```
+
+#### Example
+
+```js
+client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, '/tmp/file.png').then(function () {
+  // do something with '/tmp/file.png'
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
+### Message Metadata
+
+All the `sendTo*` methods can append some metadata on a message. Message metadata is an array of `MessageMetadata` objects in this structure:
+
+```js
+{
+  namespace: 'company-name:some-unique-namespace',
+  payload: { /* a plain object */ }
+}
+```
+
+```js
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    metadata: [{
+      namespace: 'company-name:some-unique-namespace',
+      payload: { key1: 'one', key2: 'two' }
+    }]
+  }
+).then(function (message) {
+  console.log('sent', message.body, 'with metadata', message.metadata)
+
+  // message.metadata is
+  // [{
+  //   namespace: 'company-name:some-unique-namespace',
+  //   payload: { key1: 'one', key2: 'two' },
+  //   mimetype: 'application/json'
+  // }]
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
 
 ### `client.messages.recall`
 
