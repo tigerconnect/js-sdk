@@ -17,8 +17,8 @@ If you have any questions, comments, or issues related to this repository then p
     - [`Organization`](#organization)
     - [`Group`](#group)
     - [`Message`](#message)
-    - [Attachment](#attachment)
-    - [MessageMetadata](#messagemetadata)
+    - [`Attachment`](#attachment)
+    - [`MessageMetadata`](#messagemetadata)
     - [`MessageStatusPerRecipient`](#messagestatusperrecipient)
     - [`Conversation`](#conversation)
 - [TigerConnect.Client](#tigerconnectclient)
@@ -243,7 +243,7 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `attachments`              | `Array<Attachment>`                | Array of attachments                                                       |
 | `metadata`                 | `Array<MessageMetadata>`           | Array of metadata objects on a message                                     |
 
-### Attachment
+### `Attachment`
 
 File attachment on a message
 
@@ -254,7 +254,7 @@ File attachment on a message
 | `contentType`     | `string`  | Content-Type of file (e.g. `image/png`)        |
 
 
-### MessageMetadata
+### `MessageMetadata`
 
 Metadata entry on a message
 
