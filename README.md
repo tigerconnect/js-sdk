@@ -925,7 +925,6 @@ client.groups.create({
   name: 'A group',
   memberIds: ['some-user-id-1', 'some-user-id-2']
 }).then(function (group) {
-
 	client.groups.update({
 	  name: 'A new name for the group',
 	  memberIds: ['some-user-id-1', 'some-user-id-2', 'some-user-id-3']
