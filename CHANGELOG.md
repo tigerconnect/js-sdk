@@ -1,5 +1,9 @@
 # Change Log
 
+## unreleased
+### Added
+- Listening to typing status changes
+
 ## [0.1.6] - 2016-03-17
 ### Added
 - Attachments for messages
