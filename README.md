@@ -32,7 +32,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.events.disconnect`](#clienteventsdisconnect)
     - [Listening to messages](#listening-to-messages)
     - [Listening to conversation changes](#listening-to-conversation-changes)
-    - [Listening to typing status changes](#listening-to-typing-status-changes)
+    - [Listening to typing status changes from other users](#listening-to-typing-status-changes-from-other-users)
   - [Users](#users)
     - [`client.users.find`](#clientusersfind)
   - [Messages](#messages)
@@ -43,6 +43,10 @@ If you have any questions, comments, or issues related to this repository then p
     - [Attachments](#attachments)
     - [Message Metadata](#message-metadata)
     - [`client.messages.recall`](#clientmessagesrecall)
+  - [Typing Status](#typing-status)
+    - [`client.typingStatus.startTyping`](#clienttypingstatusstarttyping)
+    - [`client.typingStatus.stopTyping`](#clienttypingstatusstoptyping)
+    - [Listening to typing status changes](#listening-to-typing-status-changes)
   - [Groups](#groups)
     - [`client.groups.create`](#clientgroupscreate)
     - [`client.groups.update`](#clientgroupsupdate)
@@ -455,27 +459,9 @@ client.on('conversation:change', function (conversation) {
 })
 ```
 
-### Listening to typing status changes
+### Listening to typing status changes from other users
 
-When another user the current user has a conversation with starts or stops typing, the client is notified.
-
-Typing events can be tracked with `typing:change` event. The event fires with an object with the following properties:
-
-- `userId: string` - the ID of the user whose typing status changed
-- `isTyping: boolean` - indicates the current status
-- `groupId: ?string` - in case the other user started typing in a group, the `groupId` is also provided. 1:1 conversations don't have `groupId`, and the typing status is global per user.
-
-Typing status stops automatically after timeout even if the stop event didn't arrive from the server, so no need to track that manually.
-
-```js
-client.on('typing:change', function onTypingChange(e) {
-  console.log(
-    e.userId,
-    (e.isTyping ? 'started' : 'stopped') + ' typing',
-    e.groupId ? 'in group ' + e.groupId : null
-  )
-})
-```
+See [Listening to typing status changes](#listening-to-typing-status-changes-1) under [Typing Status](#typing-status) section.
 
 ## Users
 
@@ -819,6 +805,64 @@ client.messages.recall('some-message-id').then(function () {
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
   else console.log('Error recalling message')
+})
+```
+
+## Typing Status
+
+### `client.typingStatus.startTyping`
+
+Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has started typing in a conversation.
+
+```js
+client.typingStatus.startTyping(
+  counterPartyId: string|User|Group
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.typingStatus.startTyping('some-user-id')
+client.typingStatus.startTyping('some-group-id')
+```
+
+### `client.typingStatus.stopTyping`
+
+Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has stopped typing in a conversation.
+
+```js
+client.typingStatus.stopTyping(
+  counterPartyId: string|User|Group
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.typingStatus.stopTyping('some-user-id')
+client.typingStatus.stopTyping('some-group-id')
+```
+
+### Listening to typing status changes
+
+When another user the current user has a conversation with starts or stops typing, the client is notified.
+
+Typing events can be tracked with `typing:change` event. The event fires with an object with the following properties:
+
+- `userId: string` - the ID of the user whose typing status changed
+- `isTyping: boolean` - indicates the current status
+- `groupId: ?string` - in case the other user started typing in a group, the `groupId` is also provided. 1:1 conversations don't have `groupId`, and the typing status is global per user.
+
+Typing status stops automatically after timeout even if the stop event didn't arrive from the server, so no need to track that manually.
+
+```js
+client.on('typing:change', function onTypingChange(e) {
+  console.log(
+    e.userId,
+    (e.isTyping ? 'started' : 'stopped') + ' typing',
+    e.groupId ? 'in group ' + e.groupId : null
+  )
 })
 ```
 
