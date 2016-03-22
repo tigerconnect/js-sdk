@@ -32,6 +32,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.events.disconnect`](#clienteventsdisconnect)
     - [Listening to messages](#listening-to-messages)
     - [Listening to conversation changes](#listening-to-conversation-changes)
+    - [Listening to typing status changes](#listening-to-typing-status-changes)
   - [Users](#users)
     - [`client.users.find`](#clientusersfind)
   - [Messages](#messages)
@@ -454,6 +455,27 @@ client.on('conversation:change', function (conversation) {
 })
 ```
 
+### Listening to typing status changes
+
+When another user the current user has a conversation with starts or stops typing, the client is notified.
+
+Typing events can be tracked with `typing:change` event. The event fires with an object with the following properties:
+
+- `userId: string` - the ID of the user whose typing status changed
+- `isTyping: boolean` - indicates the current status
+- `groupId: ?string` - in case the other user started typing in a group, the `groupId` is also provided. 1:1 conversations don't have `groupId`, and the typing status is global per user.
+
+Typing status stops automatically after timeout even if the stop event didn't arrive from the server, so no need to track that manually.
+
+```js
+client.on('typing:change', function onTypingChange(e) {
+  console.log(
+    e.userId,
+    (e.isTyping ? 'started' : 'stopped') + ' typing',
+    e.groupId ? 'in group ' + e.groupId : null
+  )
+})
+```
 
 ## Users
 
