@@ -33,6 +33,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [Listening to messages](#listening-to-messages)
     - [Listening to conversation changes](#listening-to-conversation-changes)
     - [Listening to typing status changes from other users](#listening-to-typing-status-changes-from-other-users)
+    - [Listening to Group Membership Changes](#listening-to-group-membership-changes)
   - [Users](#users)
     - [`client.users.find`](#clientusersfind)
   - [Messages](#messages)
@@ -54,6 +55,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.groups.findAll`](#clientgroupsfindall)
     - [`client.groups.destroy`](#clientgroupsdestroy)
     - [Group Member Management](#group-member-management)
+    - [Listening to Group Membership Changes](#listening-to-group-membership-changes-1)
   - [Conversations](#conversations)
     - [`client.conversations.findAll`](#clientconversationsfindall)
   - [Organizations](#organizations)
@@ -220,33 +222,57 @@ A group of users in a specific organization. Points to a single conversation.
 
 An incoming or outgoing message, can be a one on one or in a group conversation.
 
-| Property                   | Type                               | Description                                                                |
-|----------------------------|------------------------------------|----------------------------------------------------------------------------|
-| `id`                       | `string`                           | ID                                                                         |
-| `body`                     | `string`                           | Message body                                                               |
-| `sender`                   | `User`                             | User who sent the message                                                  |
-| `senderId`                 | `string`                           | ID of `sender`                                                             |
-| `recipient`                | `?User`                            | In 1 on 1 messages - a User who is the recipient                           |
-| `recipientId`              | `?string`                          | ID of `recipient`                                                          |
-| `group`                    | `?Group`                           | In group messages - the Group which the message was sent to                |
-| `groupId`                  | `?string`                          | ID of `group`                                                              |
-| `counterParty`             | `User/Group`                       | Either the `recipient` or the `group` value, depends on the message type   |
-| `counterPartyId`           | `string`                           | ID of `counterParty`                                                       |
-| `counterPartyType`         | `string`                           | Values: `user`, `group`                                                    |
-| `conversation`             | `Conversation`                     | The conversation which the message is on                                   |
-| `recipientOrganization`    | `Organization`                     | Organization of the recipient                                              |
-| `recipientOrganizationId`  | `string`                           | ID of `recipientOrganization`                                              |
-| `senderOrganization`       | `Organization`                     | Organization of the sender                                                 |
-| `senderOrganizationId`     | `string`                           | ID of `senderOrganization `                                                |
-| `ttl`                      | `int`                              | Time to live in seconds                                                    |
-| `sortNumber`               | `int`                              | A sequential number for ordering messages by time                          |
-| `createdAt`                | `string`                           | ISO date and time of creation                                              |
-| `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                          |
+| Property                   | Type                               | Description                                                                  |
+|----------------------------|------------------------------------|------------------------------------------------------------------------------|
+| `id`                       | `string`                           | ID                                                                           |
+| `body`                     | `string`                           | Message body                                                                 |
+| `sender`                   | `User`                             | User who sent the message                                                    |
+| `senderId`                 | `string`                           | ID of `sender`                                                               |
+| `recipient`                | `?User`                            | In 1 on 1 messages - a User who is the recipient                             |
+| `recipientId`              | `?string`                          | ID of `recipient`                                                            |
+| `group`                    | `?Group`                           | In group messages - the Group which the message was sent to                  |
+| `groupId`                  | `?string`                          | ID of `group`                                                                |
+| `counterParty`             | `User/Group`                       | Either the `recipient` or the `group` value, depends on the message type     |
+| `counterPartyId`           | `string`                           | ID of `counterParty`                                                         |
+| `counterPartyType`         | `string`                           | Values: `user`, `group`                                                      |
+| `conversation`             | `Conversation`                     | The conversation which the message is on                                     |
+| `recipientOrganization`    | `Organization`                     | Organization of the recipient                                                |
+| `recipientOrganizationId`  | `string`                           | ID of `recipientOrganization`                                                |
+| `senderOrganization`       | `Organization`                     | Organization of the sender                                                   |
+| `senderOrganizationId`     | `string`                           | ID of `senderOrganization `                                                  |
+| `ttl`                      | `int`                              | Time to live in seconds                                                      |
+| `dor`                      | `boolean`                          | Whether the message should be **d**eleted **o**n **r**ead (default: `false`) |
+| `messageType`              | `string`                           | Type of the message. Values: `USER_SENT`, `GROUP_MEMBERSHIP_CHANGE`          |
+| `sortNumber`               | `int`                              | A sequential number for ordering messages by time                            |
+| `createdAt`                | `string`                           | ISO date and time of creation                                                |
+| `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                            |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
 | `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
-| `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message     |
-| `attachments`              | `Array<Attachment>`                | Array of attachments                                                       |
-| `metadata`                 | `Array<MessageMetadata>`           | Array of metadata objects on a message                                     |
+| `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message       |
+| `attachments`              | `Array<Attachment>`                | Array of attachments                                                         |
+| `metadata`                 | `Array<MessageMetadata>`           | Array of metadata objects on a message                                       |
+
+#### Types of messages
+
+`messageType` indicates the type of the message. Possible types:
+
+##### `USER_SENT`
+
+This message was sent by a user and may contain `body`, `attachments`, or `metadata` to be rendered.
+
+##### `GROUP_MEMBERSHIP_CHANGE`
+
+This message is a log message of a group members change, and only available in group conversations. It shows when a group member adds or removes another member, or when someone joins/leaves the group (join event is available only in groups with `groupType='ROOM'`).
+
+This type of message generates a `body` text such as `John Doe added Alice to this group` or `Bob left this group`.
+
+In order to construct this message manually, use the extra `groupMembersChange` attribute:
+
+* `message.sender: User` - indicates the user who added or removed members in the group, or joined/left the group
+* `message.groupMembersChange.action: string` - values: `ADD`, `REMOVE`, `JOIN`, `LEAVE`
+* `message.groupMembersChange.members: Array<User>` - an array of the affected members
+* `message.groupMembersChange.members: Array<string>` - an array of the affected member IDs
+
 
 ### `Attachment`
 
@@ -288,18 +314,19 @@ Message status (read/delivered recipts) per user. Used in group conversations wh
 
 A collection of messages between current user and a counter party - a user or a group, within an organization.
 
-| Property            | Type              | Description                                                                       |
-|---------------------|-------------------|-----------------------------------------------------------------------------------|
-| `id`                | `string`          | ID                                                                                |
-| `messages`          | `Array<Message>`  | List of messages                                                                  |
-| `unreadMessages`    | `Array<Message>`  | List of unread messages                                                           |
-| `unreadCount`       | `int`             | A count of all unread messages in the list                                        |
-| `lastMessage`       | `Message`         | The last message in the conversation (useful when showing a list of conversation) |
-| `counterParty`      | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type     |
-| `counterPartyId`    | `string`          | ID of `counterParty`                                                              |
-| `counterPartyType`  | `string`          | Values: `user`, `group`                                                           |
-| `organization`      | `Organization`    | Organization where this conversation takes place                                  |
-| `organizationId`    | `string`          | ID of `organization`                                                              |
+| Property            | Type              | Description                                                                               |
+|---------------------|-------------------|-------------------------------------------------------------------------------------------|
+| `id`                | `string`          | ID                                                                                        |
+| `messages`          | `Array<Message>`  | List of messages, exclusively of type `USER_SENT`                                         |
+| `timeline`          | `Array<Message>`  | List of all messages including all types, e.g. `USER_SENT` and `GROUP_MEMBERSHIP_CHANGE`  |
+| `unreadMessages`    | `Array<Message>`  | List of unread messages                                                                   |
+| `unreadCount`       | `int`             | A count of all unread messages in the list                                                |
+| `lastMessage`       | `Message`         | The last message in the conversation (useful when showing a list of conversation)         |
+| `counterParty`      | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type             |
+| `counterPartyId`    | `string`          | ID of `counterParty`                                                                      |
+| `counterPartyType`  | `string`          | Values: `user`, `group`                                                                   |
+| `organization`      | `Organization`    | Organization where this conversation takes place                                          |
+| `organizationId`    | `string`          | ID of `organization`                                                                      |
 
 
 
@@ -461,7 +488,11 @@ client.on('conversation:change', function (conversation) {
 
 ### Listening to typing status changes from other users
 
-See [Listening to typing status changes](#listening-to-typing-status-changes-1) under [Typing Status](#typing-status) section.
+See [Listening to typing status changes](#listening-to-typing-status-changes-1) under the [Typing Status](#typing-status) section.
+
+### Listening to Group Membership Changes
+
+See [Listening to Group Membership Changes](#listening-to-group-membership-changes-1) under the [Groups](#groups) section.
 
 ## Users
 
@@ -1020,6 +1051,49 @@ client.groups.removeMembers('some-group-id', ['some-user-7', 'some-user-8']).the
 })
 ```
 
+### Listening to Group Membership Changes
+
+This event fires when:
+
+- A group member was added to a group
+- A group member was removed from a group
+- A group member left a group
+- A group member joined a group with a `ROOM` type
+
+The event contains the following attributes:
+
+- `actor: User` - the user who performed the action
+- `action: string` - `ADD`, `REMOVE`, `JOIN`, or `LEAVE`
+- `group: Group` - the group the operation was performed on
+- `members: Array<User>` - the group members affected (added/removed)
+
+```js
+client.on('group:membership:change', function (event) {
+  switch (event.action) {
+    case 'ADD':
+    case 'REMOVE':
+      console.log(
+        event.actor.displayName,
+        event.action === 'ADD' ? 'added' : 'removed',
+        event.members.map(function (m) { return m.displayName }).join(', ')
+        event.action === 'ADD' ? 'to' : 'from',
+        'the group',
+        event.group.name
+      )
+      break
+
+    case 'JOIN':
+    case 'LEAVE':
+      console.log(
+        event.actor.displayName,
+        event.action === 'JOIN' ? 'joined' : 'left',
+        'the group',
+        event.group.name
+      )
+      break
+  }
+})
+```
 
 ## Conversations
 
