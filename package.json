@@ -1,6 +1,6 @@
 {
   "name": "tigerconnect",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "JS (web and node) SDK for TigerText",
   "homepage": "",
   "repository": "tigerconnect/js-sdk-release",
@@ -15,13 +15,14 @@
   ],
   "dependencies": {
     "autobind-decorator": "^1.3.3",
-    "babel-polyfill": "^6.7.2",
+    "babel-polyfill": "^6.7.4",
     "babel-runtime": "^6.6.1",
     "btoa": "^1.1.2",
-    "bunyan": "^1.7.1",
-    "class-private-method-decorator": "^1.0.2",
+    "bunyan": "^1.8.0",
+    "class-private-method-decorator": "^2.0.0",
     "eventsource": "^0.2.1",
     "file-type": "^3.8.0",
+    "humanize-list": "^1.0.1",
     "invariant": "^2.2.1",
     "jshashes": "^1.0.5",
     "lodash": "^4.6.1",
@@ -30,7 +31,7 @@
     "node-uuid": "^1.4.7",
     "request": "^2.69.0",
     "shallowequal": "^0.2.2",
-    "superagent": "^1.8.1",
+    "superagent": "^1.8.3",
     "superagent-prefix": "0.0.2"
   },
   "license": {
