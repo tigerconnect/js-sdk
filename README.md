@@ -42,6 +42,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.sendToConversation`](#clientmessagessendtoconversation)
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
     - [Attachments](#attachments)
+    - [Message Priority](#message-priority)
     - [Message Metadata](#message-metadata)
     - [`client.messages.recall`](#clientmessagesrecall)
   - [Typing Status](#typing-status)
@@ -240,8 +241,9 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `recipientOrganizationId`  | `string`                           | ID of `recipientOrganization`                                                |
 | `senderOrganization`       | `Organization`                     | Organization of the sender                                                   |
 | `senderOrganizationId`     | `string`                           | ID of `senderOrganization `                                                  |
-| `ttl`                      | `int`                              | Time to live in seconds                                                      |
+| `ttl`                      | `int`                              | The number of minutes until the message shuold be deleted. `-1` = never. (default: `-1`) |
 | `dor`                      | `boolean`                          | Whether the message should be **d**eleted **o**n **r**ead (default: `false`) |
+| `priority`                 | `int`                              | Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`                  |
 | `messageType`              | `string`                           | Type of the message. Values: `USER_SENT`, `GROUP_MEMBERSHIP_CHANGE`          |
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                            |
 | `createdAt`                | `string`                           | ISO date and time of creation                                                |
@@ -533,9 +535,10 @@ client.messages.sendToUser(
     senderOrganizationId: string, // defaults to organizationId
     recipientOrganizationId: ?string, // defaults to senderOrganizationId
 
+    priority: ?string,
     metadata: ?Array<Object>|?Object,
     attachmentFiles: ?Array<string|Object>,
-    attachmentFile: ?string|?Object
+    attachmentFile: ?string|?Object,
   }
 ):Promise.<Message,Error>
 ```
@@ -581,6 +584,7 @@ client.messages.sendToGroup(
   body: string,
   {
     organizationId: ?string,
+    priority: ?string,
     metadata: ?Array<Object>|?Object,
     attachmentFiles: ?Array<string|Object>,
     attachmentFile: ?string|?Object
@@ -611,6 +615,7 @@ client.messages.sendToConversation(
   conversationId: string|Conversation,
   body: string,
   {
+    priority: ?string,
     metadata: ?Array<Object>|?Object,
     attachmentFiles: ?Array<string|Object>,
     attachmentFile: ?string|?Object
@@ -643,6 +648,7 @@ client.messages.sendToNewGroup(
     organizationId: string,
     groupName: ?string,
     groupMetadata: ?Object,
+    priority: ?string,
     metadata: ?Array<Object>|?Object,
     attachmentFiles: ?Array<string|Object>,
     attachmentFile: ?string|?Object
@@ -777,6 +783,19 @@ client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, 
 })
 ```
 
+### Message Priority
+
+All the `sendTo*` methods can set message `priority`. Values are `LOW`, `NORMAL` (default), or `HIGH`.
+
+```js
+client.messages.sendToUser(
+  'some-user-id', 'high priority',
+  { organizationId: 'some-org-id', priority: 'HIGH' }
+).then(function (message) {
+  console.log('sent', message.body, 'with priority', message.priority)
+})
+```
+
 ### Message Metadata
 
 All the `sendTo*` methods can append some metadata on a message. Message metadata is an array of `MessageMetadata` objects in this structure:
@@ -808,8 +827,6 @@ client.messages.sendToUser(
   //   payload: { key1: 'one', key2: 'two' },
   //   mimetype: 'application/json'
   // }]
-}, function (err) {
-  console.log('Error sending message')
 })
 ```
 

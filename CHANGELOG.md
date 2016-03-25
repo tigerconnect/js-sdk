@@ -1,5 +1,10 @@
 # Change Log
 
+## unreleased
+
+### Added
+- Message priority
+
 ## [0.1.7] - 2016-03-25
 ### Added
 - Typing status methods and events
