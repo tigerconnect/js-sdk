@@ -215,7 +215,7 @@ A group of users in a specific organization. Points to a single conversation.
 | `organization`    | `Organization`        | Organization where this conversation takes place                               |
 | `conversation`    | `Conversation`        | The conversation of the group. Can be only one.                                |
 | `organizationId`  | `string`              | ID of `organization`                                                           |
-| `createdAt`       | `string`              | ISO date and time of creation                                                  |
+| `createdAt`       | `Date`                | Date and time of creation                                                      |
 
 
 
@@ -246,7 +246,7 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `priority`                 | `int`                              | Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`                  |
 | `messageType`              | `string`                           | Type of the message. Values: `USER_SENT`, `GROUP_MEMBERSHIP_CHANGE`          |
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                            |
-| `createdAt`                | `string`                           | ISO date and time of creation                                                |
+| `createdAt`                | `Date`                             | Date and time of creation                                                    |
 | `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                            |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
 | `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
@@ -1094,8 +1094,8 @@ client.on('group:membership:change', function (event) {
         event.action === 'ADD' ? 'added' : 'removed',
         event.members.map(function (m) { return m.displayName }).join(', ')
         event.action === 'ADD' ? 'to' : 'from',
-        'the group',
-        event.group.name
+        'the group', event.group.name,
+        'at', event.createdAt
       )
       break
 
@@ -1104,8 +1104,8 @@ client.on('group:membership:change', function (event) {
       console.log(
         event.actor.displayName,
         event.action === 'JOIN' ? 'joined' : 'left',
-        'the group',
-        event.group.name
+        'the group', event.group.name,
+        'at', event.createdAt
       )
       break
   }
