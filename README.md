@@ -42,7 +42,6 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.sendToConversation`](#clientmessagessendtoconversation)
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
     - [Attachments](#attachments)
-    - [Message Priority](#message-priority)
     - [Message Metadata](#message-metadata)
     - [`client.messages.recall`](#clientmessagesrecall)
   - [Typing Status](#typing-status)
@@ -80,7 +79,7 @@ The TigerConnect JS SDK provides a simple way to enhance your web applications w
 
 In order to use the TigerConnect JS SDK you must be a registered developer. All aspects of this setup are covered in detail in the [TigerConnect Documentation](https://tigerconnect.readme.io/).
 
-This documentation shows types of variables in `flow` format, e.g. `body: string` (required string) or `amount: ?number` (optional number).
+This documentation shows types of variables in `flow` format, e.g. `body: string` (required string), `amount: ?number` (optional number), `members: User[]` (array of `User` objects), `groupId: string|Group` (string, usually refers an ID, or a `Group` object).
 
 The SDK supports both web and node.js.
 
@@ -531,9 +530,9 @@ The options object contains specific options for the method (such as group name 
 - `priority: ?string` - Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`
 - `ttl: ?number` - Time to live **in minutes**. Organization settings might override this ttl.
 - `dor: ?boolean` - Whether the message should be **d**eleted **o**n **r**ead (default: `false`)
-- `metadata: ?Object[]|?Object` - An array of objects of extra information on the message
-- `attachmentFiles: ?Array<string|Object>` - A list of attachments. Currently only a single attachment is supported. [more info](#sending-an-attachment)
-- `attachmentFile: ?string|?Object` - An attachment file. A shortcut to a single item in `attachmentFiles`.
+- `metadata: ?Object[]|?Object` - An array of [message metadata](#message-metadata) objects of extra information on the message.
+- `attachmentFiles: ?Array<string|Object>` - A list of [attachments](#sending-an-attachment). Currently only a single attachment is supported.
+- `attachmentFile: ?string|?Object` - An [attachment](#sending-an-attachment) file. A shortcut to a single item in `attachmentFiles`.
 
 
 ### `client.messages.sendToUser`
@@ -783,19 +782,6 @@ client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, 
   // do something with '/tmp/file.png'
 }, function (err) {
   console.log('Error downloading attachment')
-})
-```
-
-### Message Priority
-
-All the `sendTo*` methods can set message `priority`. Values are `LOW`, `NORMAL` (default), or `HIGH`.
-
-```js
-client.messages.sendToUser(
-  'some-user-id', 'high priority',
-  { organizationId: 'some-org-id', priority: 'HIGH' }
-).then(function (message) {
-  console.log('sent', message.body, 'with priority', message.priority)
 })
 ```
 
