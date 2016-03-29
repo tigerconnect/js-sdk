@@ -80,6 +80,8 @@ The TigerConnect JS SDK provides a simple way to enhance your web applications w
 
 In order to use the TigerConnect JS SDK you must be a registered developer. All aspects of this setup are covered in detail in the [TigerConnect Documentation](https://tigerconnect.readme.io/).
 
+This documentation shows types of variables in `flow` format, e.g. `body: string` (required string) or `amount: ?number` (optional number).
+
 The SDK supports both web and node.js.
 
 ## Installation
@@ -193,7 +195,7 @@ An organization is a scope where messages are being sent. A user can be a member
 | `id`            | `string`              | ID                                                                             |
 | `name`          | `string`              | Organization name                                                              |
 | `memberCount`   | `int`                 | Number of members                                                              |
-| `conversations` | `Array<Conversation>` | List of active conversations in the org for the logged in user                 |
+| `conversations` | `Conversation[]`      | List of active conversations in the org for the logged in user                 |
 | `unreadCount`   | `int`                 | A sum of all unread message counts in all conversations in the organization    |
 
 
@@ -207,8 +209,8 @@ A group of users in a specific organization. Points to a single conversation.
 | `name`            | `string`              | Group name                                                                     |
 | `displayName`     | `string`              | Same as `name`                                                                 |
 | `description`     | `?string`             | Group description                                                              |
-| `members`         | `Array<User>`         | List of users in this group.                                                   |
-| `memberIds`       | `Array<string>`       | IDs of `members`                                                               |
+| `members`         | `User[]`              | List of users in this group.                                                   |
+| `memberIds`       | `string[]`            | IDs of `members`                                                               |
 | `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
 | `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
 | `groupType`       | `?string`             | `GROUP`, `ROOM`, `DISTRIBUTION_LIST`                                           |
@@ -247,12 +249,12 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `messageType`              | `string`                           | Type of the message. Values: `USER_SENT`, `GROUP_MEMBERSHIP_CHANGE`          |
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                            |
 | `createdAt`                | `Date`                             | Date and time of creation                                                    |
-| `attachments`              | `Array<Attachment>`                | Array of attachments on a message                                            |
+| `attachments`              | `Attachment[]`                     | Array of attachments on a message                                            |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
 | `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
-| `statusesPerRecipient`     | `Array<MessageStatusPerRecipient>` | Array of all recipients and their read/delivery status of this message       |
-| `attachments`              | `Array<Attachment>`                | Array of attachments                                                         |
-| `metadata`                 | `Array<MessageMetadata>`           | Array of metadata objects on a message                                       |
+| `statusesPerRecipient`     | `MessageStatusPerRecipient[]`      | Array of all recipients and their read/delivery status of this message       |
+| `attachments`              | `Attachment[]`                     | Array of attachments                                                         |
+| `metadata`                 | `MessageMetadata[]`                | Array of metadata objects on a message                                       |
 
 #### Types of messages
 
@@ -272,8 +274,8 @@ In order to construct this message manually, use the extra `groupMembersChange` 
 
 * `message.sender: User` - indicates the user who added or removed members in the group, or joined/left the group
 * `message.groupMembersChange.action: string` - values: `ADD`, `REMOVE`, `JOIN`, `LEAVE`
-* `message.groupMembersChange.members: Array<User>` - an array of the affected members
-* `message.groupMembersChange.members: Array<string>` - an array of the affected member IDs
+* `message.groupMembersChange.members: User[]` - an array of the affected members
+* `message.groupMembersChange.members: string[]` - an array of the affected member IDs
 
 
 ### `Attachment`
@@ -319,9 +321,9 @@ A collection of messages between current user and a counter party - a user or a 
 | Property            | Type              | Description                                                                               |
 |---------------------|-------------------|-------------------------------------------------------------------------------------------|
 | `id`                | `string`          | ID                                                                                        |
-| `messages`          | `Array<Message>`  | List of messages, exclusively of type `USER_SENT`                                         |
-| `timeline`          | `Array<Message>`  | List of all messages including all types, e.g. `USER_SENT` and `GROUP_MEMBERSHIP_CHANGE`  |
-| `unreadMessages`    | `Array<Message>`  | List of unread messages                                                                   |
+| `messages`          | `Message[]`       | List of messages, exclusively of type `USER_SENT`                                         |
+| `timeline`          | `Message[]`       | List of all messages including all types, e.g. `USER_SENT` and `GROUP_MEMBERSHIP_CHANGE`  |
+| `unreadMessages`    | `Message[]`       | List of unread messages                                                                   |
 | `unreadCount`       | `int`             | A count of all unread messages in the list                                                |
 | `lastMessage`       | `Message`         | The last message in the conversation (useful when showing a list of conversation)         |
 | `counterParty`      | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type             |
@@ -520,6 +522,20 @@ client.users.find('some-user-id').then(function (user) {
 
 ## Messages
 
+There are several methods to send a message, depends who the recipient is. Each method gets the recipient, a body and an options object.
+
+The options object contains specific options for the method (such as group name when sending to a new group) and some generic ones:
+
+**`MessageOptions`**
+
+- `priority: ?string` - Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`
+- `ttl: ?number` - Time to live **in minutes**. Organization settings might override this ttl.
+- `dor: ?boolean` - Whether the message should be **d**eleted **o**n **r**ead (default: `false`)
+- `metadata: ?Object[]|?Object` - An array of objects of extra information on the message
+- `attachmentFiles: ?Array<string|Object>` - A list of attachments. Currently only a single attachment is supported. [more info](#sending-an-attachment)
+- `attachmentFile: ?string|?Object` - An attachment file. A shortcut to a single item in `attachmentFiles`.
+
+
 ### `client.messages.sendToUser`
 
 Sends a message to a user (1 on 1 message)
@@ -530,15 +546,11 @@ client.messages.sendToUser(
   body: string,
   {
     organizationId: string,
-
     // if sender organizationId is different than recipient's
     senderOrganizationId: string, // defaults to organizationId
     recipientOrganizationId: ?string, // defaults to senderOrganizationId
 
-    priority: ?string,
-    metadata: ?Array<Object>|?Object,
-    attachmentFiles: ?Array<string|Object>,
-    attachmentFile: ?string|?Object,
+    /* extra MessageOptions attributes */
   }
 ):Promise.<Message,Error>
 ```
@@ -584,10 +596,7 @@ client.messages.sendToGroup(
   body: string,
   {
     organizationId: ?string,
-    priority: ?string,
-    metadata: ?Array<Object>|?Object,
-    attachmentFiles: ?Array<string|Object>,
-    attachmentFile: ?string|?Object
+    /* extra MessageOptions attributes */
   }
 ):Promise.<Message,Error>
 ```
@@ -615,10 +624,7 @@ client.messages.sendToConversation(
   conversationId: string|Conversation,
   body: string,
   {
-    priority: ?string,
-    metadata: ?Array<Object>|?Object,
-    attachmentFiles: ?Array<string|Object>,
-    attachmentFile: ?string|?Object
+    /* MessageOptions attributes */
   }
 ):Promise.<Message,Error>
 ```
@@ -648,10 +654,7 @@ client.messages.sendToNewGroup(
     organizationId: string,
     groupName: ?string,
     groupMetadata: ?Object,
-    priority: ?string,
-    metadata: ?Array<Object>|?Object,
-    attachmentFiles: ?Array<string|Object>,
-    attachmentFile: ?string|?Object
+    /* extra MessageOptions attributes */
   }
 ):Promise.<Message,Error>
 ```
@@ -1082,7 +1085,7 @@ The event contains the following attributes:
 - `actor: User` - the user who performed the action
 - `action: string` - `ADD`, `REMOVE`, `JOIN`, or `LEAVE`
 - `group: Group` - the group the operation was performed on
-- `members: Array<User>` - the group members affected (added/removed)
+- `members: User[]` - the group members affected (added/removed)
 
 ```js
 client.on('group:membership:change', function (event) {

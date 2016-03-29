@@ -4,6 +4,10 @@
 
 ### Added
 - Message priority
+- Message ttl/delete on read
+
+### Fixed
+- Turn off typing notification when sending a message
 
 ## [0.1.7] - 2016-03-25
 ### Added
