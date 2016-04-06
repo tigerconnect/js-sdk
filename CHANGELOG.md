@@ -5,6 +5,7 @@
 ### Added
 - Message priority
 - Message ttl/delete on read
+- Message forwarding
 
 ### Fixed
 - Turn off typing notification when sending a message
