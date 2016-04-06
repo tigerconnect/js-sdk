@@ -44,6 +44,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [Attachments](#attachments)
     - [Message Metadata](#message-metadata)
     - [`client.messages.recall`](#clientmessagesrecall)
+    - [`client.messages.forward`](#clientmessagesforward)
   - [Typing Status](#typing-status)
     - [`client.typingStatus.startTyping`](#clienttypingstatusstarttyping)
     - [`client.typingStatus.stopTyping`](#clienttypingstatusstoptyping)
@@ -842,6 +843,41 @@ client.messages.recall('some-message-id').then(function () {
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
   else console.log('Error recalling message')
+})
+```
+
+
+### `client.messages.forward`
+
+Forwards a copy of a message from the current user to another user or a group.
+
+```js
+client.messages.forward(
+  id: string|Message,
+  recipientId: string|User|Group|Conversation, // could also be a user email or a phone number
+  {
+    organizationId: string,
+    retrieveMessage: boolean
+  }
+):Promise.<void|Message,Error>
+```
+
+- `retrieveMessage` option indicates whether to retrieve the new message after a successful forward. Default: `false`. Forwarded messages come in the event stream so usually there's no need to do so.
+
+#### Example
+
+```js
+client.messages.forward('someMessageToForwardId', 'someUserId', {
+  organizationId: 'some-org-id',
+  retrieveMessage: true
+}).then(function (newMessage) {
+  console.log(
+    'the message', newMessage.body,
+    'originally sent by user ID', newMessage.originalSenderId, 'name: ', newMessage.originalSenderDisplayName,
+    'is forwarded', newMessage.isForwarded,
+  )
+}, function (err) {
+  console.log('Error forwarding message')
 })
 ```
 
