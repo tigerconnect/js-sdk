@@ -6,6 +6,8 @@
 - Message priority
 - Message ttl/delete on read
 - Message forwarding
+- Conversation muting
+- Presence events
 
 ### Fixed
 - Turn off typing notification when sending a message

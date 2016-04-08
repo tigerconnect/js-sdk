@@ -34,6 +34,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [Listening to conversation changes](#listening-to-conversation-changes)
     - [Listening to typing status changes from other users](#listening-to-typing-status-changes-from-other-users)
     - [Listening to Group Membership Changes](#listening-to-group-membership-changes)
+    - [Listening to Presence Changes](#listening-to-presence-changes)
   - [Users](#users)
     - [`client.users.find`](#clientusersfind)
   - [Messages](#messages)
@@ -59,6 +60,11 @@ If you have any questions, comments, or issues related to this repository then p
     - [Listening to Group Membership Changes](#listening-to-group-membership-changes-1)
   - [Conversations](#conversations)
     - [`client.conversations.findAll`](#clientconversationsfindall)
+  - [Mute Conversations](#mute-conversations)
+    - [`client.mute.findAll`](#clientmutefindall)
+    - [`client.mute.unmuteAll`](#clientmuteunmuteall)
+    - [`client.mute.mute`](#clientmutemute)
+    - [`client.mute.unmute`](#clientmuteunmute)
   - [Organizations](#organizations)
     - [`client.organizations.findAll`](#clientorganizationsfindall)
     - [`client.organizations.find`](#clientorganizationsfind)
@@ -497,6 +503,23 @@ See [Listening to typing status changes](#listening-to-typing-status-changes-1) 
 ### Listening to Group Membership Changes
 
 See [Listening to Group Membership Changes](#listening-to-group-membership-changes-1) under the [Groups](#groups) section.
+
+### Listening to Presence Changes
+
+To get notified when a user goes online of offline:
+
+`event.user` will contain the user only if the user is previously loaded from the server.
+
+```js
+client.on('presence:change', function (event) {
+  console.log(
+    'user', event.userId,
+    'is now', event.presence,
+    event.user ? event.user.displayName : '(user object not available)'
+  )
+})
+```
+
 
 ## Users
 
@@ -1169,6 +1192,97 @@ client.conversations.findAll().then(function (conversations) {
 })
 ```
 
+## Mute Conversations
+
+Muting a conversation means that the current user won't get push notifications on other devices.
+
+### `client.mute.findAll`
+
+Retrieves all current muted conversations.
+
+```js
+client.mute.findAll():Promise.<MuteEntry[],Error>
+```
+
+`MuteEntry` has the following attributes:
+
+- `conversationId: string`
+- `entityType: string` - `user` or `group`
+- `entityId: string`
+- `organizationId: string`
+- `startedAt: integer` - a unix timestamp (e.g. `1460136747551`)
+- `durationInMinutes: integer`
+- `expiresAt: integer` - a unix timestamp (e.g. `1460136747551`)
+
+#### Example
+
+```js
+client.mute.findAll().then(function (muteEntries) {
+  muteEntries.forEach(funciton (muteEntry) {
+    console.log(
+      'conversation ID', muteEntry.conversationId,
+      'with', muteEntry.entityType, muteEntry.entityId, 'in organization', muteEntry.organizationId,
+      'was muted at ', muteEntry.startedAt, ' for ', muteEntry.durationInMinutes, 'minutes',
+      'and will expire at', muteEntry.expiresAt
+    )
+  })
+})
+```
+
+### `client.mute.unmuteAll`
+
+Clears all the current muted conversations.
+
+#### Example
+
+```js
+client.mute.unmuteAll()
+```
+
+### `client.mute.mute`
+
+Starts muting a conversation.
+
+```js
+client.mute.mute(
+  entityId: string|User|Group|Conversation,
+  durationInMinutes: number, // positive integer between 1 and 525600 (1 year)
+  organizationId: ?string
+):Promise.<void,Error>
+```
+
+#### Examples
+
+```js
+client.mute.mute(conversation, 10)
+client.mute.mute(group, 10)
+client.mute.mute(user, 10, 'some-org-id') // must have organizationId specified for users
+
+client.mute.mute('some-user-id', 10, 'some-org-id') // must have organizationId specified for user IDs
+client.mute.mute('some-group-id', 10, 'some-org-id') // must have organizationId specified for group IDs
+```
+
+### `client.mute.unmute`
+
+Stops muting a conversation.
+
+```js
+client.mute.unmute(
+  entityId: string|User|Group|Conversation,
+  organizationId: ?string
+):Promise.<void,Error>
+```
+
+#### Examples
+
+```js
+client.mute.unmute(conversation)
+client.mute.unmute(group)
+client.mute.unmute(user, 'some-org-id') // must have organizationId specified for users
+
+client.mute.unmute('some-user-id', 'some-org-id') // must have organizationId specified for user IDs
+client.mute.unmute('some-group-id', 'some-org-id') // must have organizationId specified for group IDs
+```
 
 ## Organizations
 
