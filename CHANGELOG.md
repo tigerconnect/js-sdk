@@ -1,6 +1,6 @@
 # Change Log
 
-## unreleased
+## [0.1.8] - 2016-04-14
 
 ### Added
 - Message priority
