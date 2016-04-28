@@ -1443,7 +1443,7 @@ client.metadata.fullUpdate('some-group-id', { 'new_key': 'new_value' }).then(fun
 
 ## Contact
 
-If you have any questions please reach out to the TigerConnect team any time by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
+If you have any questions please reach out to the TigerConnect team any time by emailing [tigerconnect@tigertext.com](mailto:developersupport@tigertext.com).
 
 ## License
 
