@@ -1336,7 +1336,8 @@ client.search.query({
   query = {},
   continuation = null,
   includeDisabled = false,
-  excludeTokens = [],
+  excludeIds = [],
+  excludeSelf = false,
   resultsFormat = 'entities', // or 'ids'
   organizationId = null,
   sort = [],
