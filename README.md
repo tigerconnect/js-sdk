@@ -1360,6 +1360,8 @@ client.search.query({
 })
 ```
 
+`types` may contain any or all of `'user'`, `'group'`, `'room'`, `'distributionList'`.
+
 `includeMetadata: true` will also load all metadata for all entities, assigning them into each `result.metadata`
 
 
