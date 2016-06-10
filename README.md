@@ -6,7 +6,7 @@ If you have any questions, comments, or issues related to this repository then p
 
 <!-- MarkdownTOC depth=3 autolink=true bracket=round -->
 
-- [Overview](#overview)
+  - [Overview](#overview)
   - [Installation](#installation)
     - [Web](#web)
     - [Node](#node)
@@ -44,6 +44,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
     - [Attachments](#attachments)
     - [Message Metadata](#message-metadata)
+    - [`client.messages.markAsRead`](#clientmessagesmarkasread)
     - [`client.messages.recall`](#clientmessagesrecall)
     - [`client.messages.forward`](#clientmessagesforward)
   - [Typing Status](#typing-status)
@@ -843,6 +844,40 @@ client.messages.sendToUser(
 })
 ```
 
+### `client.messages.markAsRead`
+
+Marks an incoming message as read, and sends an update to the sender.
+
+Every incoming message is automatically marked as `DELIVERED`. However, marking as `READ` depends on the UI of the application, and should be called when user actually sees the message.
+
+```js
+client.messages.markAsRead(
+  ids: string|Message|string[]|Message[]
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+// mark a single message as read
+
+client.messages.markAsRead('some-message-id').then(function () {
+  console.log('message marked as read!')
+}, function (err) {
+  if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
+  else console.log('Error marking message read')
+})
+
+
+// mark all messages in a conversation as read
+
+client.messages.markAsRead(conversation.unreadMessages).then(function () {
+  console.log('messages marked as read!')
+}, function (err) {
+  if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
+  else console.log('Error marking messages read')
+})
+```
 
 ### `client.messages.recall`
 
