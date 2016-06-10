@@ -869,7 +869,7 @@ client.messages.markAsRead('some-message-id').then(function () {
 })
 
 
-// mark all messages in a conversation as read
+// mark all unread messages in a conversation as read
 
 client.messages.markAsRead(conversation.unreadMessages).then(function () {
   console.log('messages marked as read!')
