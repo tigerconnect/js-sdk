@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.11] - 2016-06-20
+
+- Stability and bug fixes
+
 ## [0.1.10] - 2016-05-31
 
 - Group avatars
