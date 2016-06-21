@@ -16,6 +16,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`User`](#user)
     - [`Organization`](#organization)
     - [`Group`](#group)
+    - [`DistributionList`](#distributionlist)
     - [`Message`](#message)
     - [`Attachment`](#attachment)
     - [`MessageMetadata`](#messagemetadata)
@@ -220,12 +221,27 @@ A group of users in a specific organization. Points to a single conversation.
 | `memberIds`       | `string[]`            | IDs of `members`                                                               |
 | `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
 | `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
-| `groupType`       | `?string`             | `GROUP`, `ROOM`, `DISTRIBUTION_LIST`                                           |
-| `organization`    | `Organization`        | Organization where this conversation takes place                               |
-| `conversation`    | `Conversation`        | The conversation of the group. Can be only one.                                |
+| `groupType`       | `?string`             | `GROUP`, `ROOM`                                                                |
 | `organizationId`  | `string`              | ID of `organization`                                                           |
+| `organization`    | `Organization`        | Organization where this conversation takes place                               |
+| `conversationId`  | `string`              | ID of `conversation`                                                           |
+| `conversation`    | `Conversation`        | The conversation of the group. Can be only one.                                |
 | `createdAt`       | `Date`                | Date and time of creation                                                      |
 
+
+### `DistributionList`
+
+A distribution list
+
+| Property          | Type                  | Description                                                                    |
+|-------------------|-----------------------|--------------------------------------------------------------------------------|
+| `id`              | `string`              | ID                                                                             |
+| `name`            | `string`              | Group name                                                                     |
+| `displayName`     | `string`              | Same as `name`                                                                 |
+| `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
+| `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
+| `organizationId`  | `string`              | ID of `organization`                                                           |
+| `organization`    | `Organization`        | Organization where this conversation takes place                               |
 
 
 ### `Message`
