@@ -369,6 +369,7 @@ var client = new TigerConnect.Client(config)
 
 ```js
 var client = new TigerConnect.Client({
+  baseUrl: 'custom url', 
   defaultOrganizationId: null, // use the default org to send all messages in a specific organization unless specified otherwise
   eventsFeatures: 'is-typing',
   logLevel: 'error', // debug/info/warn/error/fatal
