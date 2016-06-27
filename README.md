@@ -267,7 +267,7 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `senderOrganization`       | `Organization`                     | Organization of the sender                                                   |
 | `senderOrganizationId`     | `string`                           | ID of `senderOrganization `                                                  |
 | `ttl`                      | `int`                              | The number of minutes until the message shuold be deleted. `-1` = never. (default: `-1`) |
-| `dor`                      | `boolean`                          | Whether the message should be **d**eleted **o**n **r**ead (default: `false`) |
+| `deleteOnRead`             | `boolean`                          | Whether the message should be deleted immediately after being read by recipient (default: `false`) |
 | `priority`                 | `int`                              | Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`                  |
 | `messageType`              | `string`                           | Type of the message. Values: `USER_SENT`, `GROUP_MEMBERSHIP_CHANGE`          |
 | `sortNumber`               | `int`                              | A sequential number for ordering messages by time                            |
@@ -369,9 +369,17 @@ var client = new TigerConnect.Client(config)
 
 ```js
 var client = new TigerConnect.Client({
-  baseUrl: 'custom url', 
+  baseUrl: 'https://developer.tigertext.me/v2',
   defaultOrganizationId: null, // use the default org to send all messages in a specific organization unless specified otherwise
-  eventsFeatures: 'is-typing',
+  events: {
+    autoAck: false,
+    isTyping: true,
+    multiOrg: true,
+    noOfflineMessages: false, // make this true if previous messages should be disregarded
+    autoDeliver: false,
+    hidden: false,
+    closeAfterMessages: false,
+  },
   logLevel: 'error', // debug/info/warn/error/fatal
 })
 ```
@@ -571,7 +579,7 @@ The options object contains specific options for the method (such as group name 
 
 - `priority: ?string` - Message priority. Values: `LOW`, `NORMAL` (default), `HIGH`
 - `ttl: ?number` - Time to live **in minutes**. Organization settings might override this ttl.
-- `dor: ?boolean` - Whether the message should be **d**eleted **o**n **r**ead (default: `false`)
+- `deleteOnRead: ?boolean` - Whether the message should be **d**eleted **o**n **r**ead (default: `false`)
 - `metadata: ?Object[]|?Object` - An array of [message metadata](#message-metadata) objects of extra information on the message.
 - `attachmentFiles: ?Array<string|Object>` - A list of [attachments](#sending-an-attachment). Currently only a single attachment is supported.
 - `attachmentFile: ?string|?Object` - An [attachment](#sending-an-attachment) file. A shortcut to a single item in `attachmentFiles`.
