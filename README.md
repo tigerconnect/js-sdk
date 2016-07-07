@@ -1044,7 +1044,7 @@ client.groups.create({
 ```js
 client.groups.create({
   organizationId: 'some-org-id',
-  name: 'The greatest group'
+  name: 'The greatest group',
   memberIds: [
     'some-user-id-1',
     'some-user-id-2',
