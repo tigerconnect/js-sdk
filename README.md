@@ -1427,19 +1427,21 @@ client.search.query({
 
 ## Metadata
 
+`Group` and `User` entities may have meta data entries per organization. A meta data entry is a simple object (dictionary) with up to 8 keys.
+
 ### `client.metadata.find`
 
 Retrieves metadata of an entity (supported entities - `Group`/`User`)
 
 ```js
-client.metadata.find(id: string|Group|User):Promise.<Object,Error>
+client.metadata.find(id: string|Group|User, organizationId: string):Promise.<Object,Error>
 ```
 
 #### Example
 
 ```js
-client.metadata.find('some-group-id').then(function (metadata) {
-  console.log('metadata for some-group-id is ', metadata)
+client.metadata.find('some-group-id', 'some-org-id').then(function (metadata) {
+  console.log('metadata for some-group-id in some-org-id is ', metadata)
 }, function (err) {
   if (err.code === 'not-found') console.log('Entity not found')
   else console.log('Error')
@@ -1451,13 +1453,13 @@ client.metadata.find('some-group-id').then(function (metadata) {
 Retrieves metadata of an multiple entities (supported entities - `Group`/`User`). Gets a list of IDs (or entities) and returns a map where keys are IDs and values are the metadata object.
 
 ```js
-client.metadata.findMulti(id: string[]|Group[]|User[]):Promise.<Object,Error>
+client.metadata.findMulti(id: string[]|Group[]|User[], organizationId: string):Promise.<Object,Error>
 ```
 
 #### Example
 
 ```js
-client.metadata.findMulti(['some-group-id', 'some-group-id-2', 'some-user-id']).then(function (map) {
+client.metadata.findMulti(['some-group-id', 'some-group-id-2', 'some-user-id'], 'some-org-id').then(function (map) {
   console.log('metadata for some-group-id: ', map['some-group-id'])
   console.log('metadata for some-group-id-2: ', map['some-group-id-2'])
   console.log('metadata for some-user-id: ', map['some-user-id'])
@@ -1469,13 +1471,13 @@ client.metadata.findMulti(['some-group-id', 'some-group-id-2', 'some-user-id']).
 Adds/updates metadata on an entity (partial update)
 
 ```js
-client.metadata.update(id: string|Group|User):Promise.<void,Error>
+client.metadata.update(id: string|Group|User, organizationId: string):Promise.<void,Error>
 ```
 
 #### Example
 
 ```js
-client.metadata.update('some-group-id', { 'new_key': 'new_value' }).then(function (entireData) {
+client.metadata.update('some-group-id', { 'new_key': 'new_value' }, 'some-org-id').then(function (entireData) {
   console.log('metadata for some-group-id updated and is now: ', entireData)
 }, function (err) {
   if (err.code === 'not-found') console.log('Entity not found')
@@ -1489,13 +1491,13 @@ client.metadata.update('some-group-id', { 'new_key': 'new_value' }).then(functio
 Overwrites the entire metadata of an entity
 
 ```js
-client.metadata.fullUpdate(id: string|Group|User):Promise.<void,Error>
+client.metadata.fullUpdate(id: string|Group|User, organizationId: string):Promise.<void,Error>
 ```
 
 #### Example
 
 ```js
-client.metadata.fullUpdate('some-group-id', { 'new_key': 'new_value' }).then(function (newData) {
+client.metadata.fullUpdate('some-group-id', { 'new_key': 'new_value' }, 'some-org-id').then(function (newData) {
   console.log('metadata for some-group-id set to', newData)
 }, function (err) {
   if (err.code === 'not-found') console.log('Entity not found')
