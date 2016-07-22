@@ -1065,7 +1065,7 @@ client.groups.create({
 Updates an existing group. Always appending the current user to the group `memberIds` even when edited.
 
 ```js
-client.groups.update({
+client.groups.update(id: string|Group, {
   name: string,
   memberIds: Array<User|string>,
   replayHistory: bool = true,
@@ -1076,22 +1076,14 @@ client.groups.update({
 #### Example
 
 ```js
-client.groups.create({
-  organizationId: 'some-org-id',
-  name: 'A group',
-  memberIds: ['some-user-id-1', 'some-user-id-2']
+client.groups.update('some-group-id', {
+  name: 'A new name for the group',
+  memberIds: ['some-user-id-1', 'some-user-id-2', 'some-user-id-3']
 }).then(function (group) {
-	client.groups.update({
-	  name: 'A new name for the group',
-	  memberIds: ['some-user-id-1', 'some-user-id-2', 'some-user-id-3']
-	}).then(function (group) {
-	  console.log(
-	    'group updated:', group.name,
-	    'members: ', group.members.map(function (user) { return user.displayName }).join(', ')
-	  )
-	})
-}, function (err) {
-  console.log('Error creating group')
+  console.log(
+    'group updated:', group.name,
+    'members: ', group.members.map(function (user) { return user.displayName }).join(', ')
+  )
 })
 ```
 
@@ -1226,6 +1218,8 @@ client.on('group:membership:change', function (event) {
 
 Retrieves all active `Conversation`s of current user.
 
+If requested before `events` is connected, conversations will have no messages.
+
 ```js
 client.conversations.findAll():Promise.<Conversation[],Error>
 ```
@@ -1236,18 +1230,16 @@ client.conversations.findAll():Promise.<Conversation[],Error>
 client.conversations.findAll().then(function (conversations) {
   console.log('found', conversations.length, 'conversations')
   conversations.forEach(function (conversation) {
-  	 if (conversation.counterPartyType === 'user') {
-      console.log(
-        conversation.counterParty.displayName,
-      )
-  	 }
-  	 else if (conversation.counterPartyType == 'group') {
+     if (conversation.counterPartyType === 'user') {
+      console.log(conversation.counterParty.displayName)
+     }
+     else if (conversation.counterPartyType == 'group') {
       console.log(
         conversation.counterParty.displayName,
         'group, members:',
         conversation.counterParty.members.map(function (user) { return user.displayName }).join(', ')
       )
-  	 }
+     }
   })
 })
 ```
