@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.13] - 2016-07-25
+
+### Fixed
+
+- Fixed `messages.downloadAttachmentUrl` for local attachments
+
+
 ## [0.1.12] - 2016-07-06
 
 - Support for IE10

@@ -794,10 +794,10 @@ client.messages.sendToUser(
 
 ##### Web
 
-On web, use `client.messages.downloadAttachmentURL` to get a Base64 URL:
+On web, use `client.messages.downloadAttachmentUrl` to get a Base64 URL:
 
 ```js
-client.messages.downloadAttachmentURL(
+client.messages.downloadAttachmentUrl(
   messageId: string|Message,
   attachmentId: string
 ):Promise.<string,Error>
@@ -806,7 +806,7 @@ client.messages.downloadAttachmentURL(
 #### Example
 
 ```js
-client.messages.downloadAttachmentURL(message.id, message.attachments[0].id).then(function (url) {
+client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).then(function (url) {
   image.src = url
 }, function (err) {
   console.log('Error downloading attachment')
