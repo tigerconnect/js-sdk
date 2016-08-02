@@ -475,13 +475,26 @@ client.signOut().then(function () {
 
 After a successful sign in, this will connect the client to the server's event stream.
 
-When event stream opens for the first time for a user, all message hisory downloads. This may take a few seconds to complete if there is a large number of messages.
+When event stream opens for the first time for a user, the entire message hisory is downloaded. This may take a few seconds to complete if there is a large number of messages.
 
 Event stream contains entries about new messages, presence changes, read/deliverered recipts, group membership changes etc. The SDK takes care of all these events and applies the changes automatically to the internal data store, as long as the event stream is opened.
 
 ```js
 client.events.connect().then(function () { console.log('listening to new events') })
 ```
+
+The event stream is divided into two phases: offline messages (including history) and new messages. In order to show the most up-to-date UI with all conversations and messages, all the offline messages should be downloaded. The stopping point of the offline messages is marked with the event `messages:offline:stop`:
+
+
+```js
+client.events.connect()
+
+client.on('messages:offline:stop', function () {
+  console.log('all offline messages are downloaded!')
+})
+```
+
+After that point, message events will come on new messages.
 
 ### `client.events.disconnect`
 

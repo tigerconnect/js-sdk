@@ -1,5 +1,17 @@
 # Change Log
 
+## [0.1.14] - 2016-08-01
+
+### Added
+
+- OAuth configuration
+
+### Fixed
+
+- `messages:offline:stop` is now called only after all offline conversations fired `conversation:change`
+- `conversation:change` is fired properly after a message status is changed
+
+
 ## [0.1.13] - 2016-07-25
 
 ### Fixed
