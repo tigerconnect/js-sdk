@@ -43,11 +43,13 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.sendToGroup`](#clientmessagessendtogroup)
     - [`client.messages.sendToConversation`](#clientmessagessendtoconversation)
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
-    - [Attachments](#attachments)
     - [Message Metadata](#message-metadata)
     - [`client.messages.markAsRead`](#clientmessagesmarkasread)
     - [`client.messages.recall`](#clientmessagesrecall)
     - [`client.messages.forward`](#clientmessagesforward)
+  - [Message Attachments](#message-attachments)
+    - [Sending an attachment](#sending-an-attachment)
+    - [Downloading an attachment](#downloading-an-attachment)
   - [Typing Status](#typing-status)
     - [`client.typingStatus.startTyping`](#clienttypingstatusstarttyping)
     - [`client.typingStatus.stopTyping`](#clienttypingstatusstoptyping)
@@ -749,133 +751,6 @@ client.messages.sendToNewGroup(
 })
 ```
 
-### Attachments
-
-#### Sending an attachment
-
-All the `sendTo*` methods can also attach a file.  Sending an attachment is done with the `attachmentFiles` or `attachmentFile` keys. Currently only a single attachment per message is supported, so if using `attachmentFiles` array, make sure to send only a single entry.
-
-There's a slight difference between the web and the Node.js implementations:
-
-##### Web
-
-On the Web, `attachmentFile` takes an instance of `File`, which is available on an `<input type="file">` `files` collection.
-
-```js
-var file = inputFileReference.files[0]
-
-client.messages.sendToUser(
-  'some-user-id',
-  'hello!',
-  {
-    organizationId: 'some-org-id',
-    attachmentFile: file
-  }
-).then(function (message) {
-  console.log('sent', message.body, 'with attachments', message.attachments)
-}, function (err) {
-  console.log('Error sending message')
-})
-```
-
-##### Node.js
-
-In Node, `attachmentFile` can be either an absolute path to a local file (a string), or a `Buffer` object, that can be obtained by `fs.readFile`/`fs.readFileSync`.
-
-```js
-var file = '/path/to/file.jpg'
-
-// or
-
-var file = fs.readFileSync('/path/to/file')
-
-client.messages.sendToUser(
-  'some-user-id',
-  'hello!',
-  {
-    organizationId: 'some-org-id',
-    attachmentFile: file
-  }
-).then(function (message) {
-  console.log('sent', message.body, 'with attachments', message.attachments)
-}, function (err) {
-  console.log('Error sending message')
-})
-```
-
-#### Downloading an attachment
-
-##### Web
-
-It's important to distinguish between an image attachment and a different type file.
-To tell if an attachment is an image, use:
-
-```js
-var message = ...
-var attachment = message.attachments[0]
-var isImage = attachment.contentType.indexOf('image/') === 0
-```
-
-###### Retrieve an image URL `client.messages.downloadAttachmentUrl`
-
-```js
-client.messages.downloadAttachmentUrl(
-  messageId: string|Message,
-  attachmentId: string
-):Promise.<string,Error>
-```
-
-#### Example
-
-```js
-client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).then(function (url) {
-  image.src = url
-}, function (err) {
-  console.log('Error downloading attachment')
-})
-```
-
-###### Save file to local computer with `client.messages.downloadAttachment`
-
-```js
-client.messages.downloadAttachment(
-  messageId: string|Message,
-  attachmentId: string
-):Promise.<void,Error>
-```
-
-#### Example
-
-```js
-client.messages.downloadAttachment(message.id, message.attachments[0].id).then(function (url) {
-  // browser initiated download successfully
-}, function (err) {
-  console.log('Error downloading attachment')
-})
-```
-
-##### Node.js
-
-###### Download file to local server with `client.messages.downloadAttachmentToFile`
-
-```js
-client.messages.downloadAttachmentToFile(
-  messageId: string|Message,
-  attachmentId: string,
-  dest: string
-):Promise.<string,Error>
-```
-
-#### Example
-
-```js
-client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, '/tmp/file.png').then(function () {
-  // do something with '/tmp/file.png'
-}, function (err) {
-  console.log('Error downloading attachment')
-})
-```
-
 ### Message Metadata
 
 All the `sendTo*` methods can append some metadata on a message. Message metadata is an array of `MessageMetadata` objects in this structure:
@@ -1004,6 +879,135 @@ client.messages.forward('someMessageToForwardId', 'someUserId', {
   console.log('Error forwarding message')
 })
 ```
+
+
+## Message Attachments
+
+### Sending an attachment
+
+All the `sendTo*` methods can also attach a file.  Sending an attachment is done with the `attachmentFiles` or `attachmentFile` keys. Currently only a single attachment per message is supported, so if using `attachmentFiles` array, make sure to send only a single entry.
+
+There's a slight difference between the web and the Node.js implementations:
+
+#### Web
+
+On the Web, `attachmentFile` takes an instance of `File`, which is available on an `<input type="file">` `files` collection.
+
+```js
+var file = inputFileReference.files[0]
+
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    attachmentFile: file
+  }
+).then(function (message) {
+  console.log('sent', message.body, 'with attachments', message.attachments)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+#### Node.js
+
+In Node, `attachmentFile` can be either an absolute path to a local file (a string), or a `Buffer` object, that can be obtained by `fs.readFile`/`fs.readFileSync`.
+
+```js
+var file = '/path/to/file.jpg'
+
+// or
+
+var file = fs.readFileSync('/path/to/file')
+
+client.messages.sendToUser(
+  'some-user-id',
+  'hello!',
+  {
+    organizationId: 'some-org-id',
+    attachmentFile: file
+  }
+).then(function (message) {
+  console.log('sent', message.body, 'with attachments', message.attachments)
+}, function (err) {
+  console.log('Error sending message')
+})
+```
+
+### Downloading an attachment
+
+#### Web
+
+It's important to distinguish between an image attachment and a different type file.
+To tell if an attachment is an image, use:
+
+```js
+var message = ...
+var attachment = message.attachments[0]
+var isImage = attachment.contentType.indexOf('image/') === 0
+```
+
+##### Retrieve an image URL `client.messages.downloadAttachmentUrl`
+
+```js
+client.messages.downloadAttachmentUrl(
+  messageId: string|Message,
+  attachmentId: string
+):Promise.<string,Error>
+```
+
+###### Example
+
+```js
+client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).then(function (url) {
+  image.src = url
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
+##### Save file to local computer with `client.messages.downloadAttachment`
+
+```js
+client.messages.downloadAttachment(
+  messageId: string|Message,
+  attachmentId: string
+):Promise.<void,Error>
+```
+
+###### Example
+
+```js
+client.messages.downloadAttachment(message.id, message.attachments[0].id).then(function (url) {
+  // browser initiated download successfully
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
+#### Node.js
+
+##### Download file to local server with `client.messages.downloadAttachmentToFile`
+
+```js
+client.messages.downloadAttachmentToFile(
+  messageId: string|Message,
+  attachmentId: string,
+  dest: string
+):Promise.<string,Error>
+```
+
+###### Example
+
+```js
+client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, '/tmp/file.png').then(function () {
+  // do something with '/tmp/file.png'
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
 
 ## Typing Status
 
