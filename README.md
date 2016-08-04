@@ -948,7 +948,9 @@ var attachment = message.attachments[0]
 var isImage = attachment.contentType.indexOf('image/') === 0
 ```
 
-##### Retrieve an image URL `client.messages.downloadAttachmentUrl`
+##### `client.messages.downloadAttachmentUrl`
+
+Retrieve an image URL.
 
 ```js
 client.messages.downloadAttachmentUrl(
@@ -967,7 +969,9 @@ client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).the
 })
 ```
 
-##### Save file to local computer with `client.messages.downloadAttachment`
+##### `client.messages.downloadAttachment`
+
+Save file to local computer.
 
 ```js
 client.messages.downloadAttachment(
