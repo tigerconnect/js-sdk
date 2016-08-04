@@ -1,10 +1,16 @@
 # Change Log
 
+## [0.1.15] - 2016-08-04
+
+### Added
+
+- Download attachments on the browser with `client.messages.downloadAttachment`
+
 ## [0.1.14] - 2016-08-01
 
 ### Added
 
-- OAuth configuration
+- OAuth authentication config
 
 ### Fixed
 

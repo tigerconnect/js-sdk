@@ -274,7 +274,7 @@ An incoming or outgoing message, can be a one on one or in a group conversation.
 | `createdAt`                | `Date`                             | Date and time of creation                                                    |
 | `attachments`              | `Attachment[]`                     | Array of attachments on a message                                            |
 | `senderStatus`             | `string`                           | Relevant only when the sender is the current user. Values: `NEW`, `SENDING`, `SENT`, `FAILURE`. If not the current user, value is `NA` |
-| `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
+| `recipientStatus`          | `string`                           | Relevant only in 1 on 1 messages. Values: `NEW`, `DELIVERED`, `READ`. In group messages value is `NA`, use `statusesPerRecipient` for all members statuses |
 | `statusesPerRecipient`     | `MessageStatusPerRecipient[]`      | Array of all recipients and their read/delivery status of this message       |
 | `attachments`              | `Attachment[]`                     | Array of attachments                                                         |
 | `metadata`                 | `MessageMetadata[]`                | Array of metadata objects on a message                                       |
@@ -334,7 +334,7 @@ Message status (read/delivered recipts) per user. Used in group conversations wh
 | `userId`          | `string`  | ID of `user`                                   |
 | `message`         | `Message` | Message containing the status                  |
 | `messageId`       | `string`  | ID of `message`                                |
-| `recipientStatus` | `string`  | `NEW`, `DELIVERED`, `TO_BE_READ`, `READ`       |
+| `recipientStatus` | `string`  | `NEW`, `DELIVERED`, `READ`       |
 
 
 ### `Conversation`
@@ -757,7 +757,7 @@ All the `sendTo*` methods can also attach a file.  Sending an attachment is done
 
 There's a slight difference between the web and the Node.js implementations:
 
-**Web**
+##### Web
 
 On the Web, `attachmentFile` takes an instance of `File`, which is available on an `<input type="file">` `files` collection.
 
@@ -778,7 +778,7 @@ client.messages.sendToUser(
 })
 ```
 
-**Node.js**
+##### Node.js
 
 In Node, `attachmentFile` can be either an absolute path to a local file (a string), or a `Buffer` object, that can be obtained by `fs.readFile`/`fs.readFileSync`.
 
@@ -807,7 +807,16 @@ client.messages.sendToUser(
 
 ##### Web
 
-On web, use `client.messages.downloadAttachmentUrl` to get a Base64 URL:
+It's important to distinguish between an image attachment and a different type file.
+To tell if an attachment is an image, use:
+
+```js
+var message = ...
+var attachment = message.attachments[0]
+var isImage = attachment.contentType.indexOf('image/') === 0
+```
+
+###### Retrieve an image URL `client.messages.downloadAttachmentUrl`
 
 ```js
 client.messages.downloadAttachmentUrl(
@@ -826,9 +835,28 @@ client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).the
 })
 ```
 
+###### Save file to local computer with `client.messages.downloadAttachment`
+
+```js
+client.messages.downloadAttachment(
+  messageId: string|Message,
+  attachmentId: string
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.messages.downloadAttachment(message.id, message.attachments[0].id).then(function (url) {
+  // browser initiated download successfully
+}, function (err) {
+  console.log('Error downloading attachment')
+})
+```
+
 ##### Node.js
 
-On Node, use `client.messages.downloadAttachmentToFile` to download a file locally:
+###### Download file to local server with `client.messages.downloadAttachmentToFile`
 
 ```js
 client.messages.downloadAttachmentToFile(
