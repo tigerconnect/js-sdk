@@ -971,7 +971,7 @@ client.messages.downloadAttachmentUrl(message.id, message.attachments[0].id).the
 
 ##### `client.messages.downloadAttachment`
 
-Save file to local computer.
+Save file to local computer. Initiates a browser download.
 
 ```js
 client.messages.downloadAttachment(
