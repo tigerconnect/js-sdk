@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.17] - 2016-09-19
+
+- Internal fixes.
+
 ## [0.1.16] - 2016-09-08
 
 - Internal fixes.
