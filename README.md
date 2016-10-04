@@ -50,6 +50,7 @@ If you have any questions, comments, or issues related to this repository then p
   - [Message Attachments](#message-attachments)
     - [Sending an attachment](#sending-an-attachment)
     - [Downloading an attachment](#downloading-an-attachment)
+    - [`client.messages.findAttachment`](#clientmessagesfindattachment)
   - [Typing Status](#typing-status)
     - [`client.typingStatus.startTyping`](#clienttypingstatusstarttyping)
     - [`client.typingStatus.stopTyping`](#clienttypingstatusstoptyping)
@@ -64,6 +65,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [Listening to Group Membership Changes](#listening-to-group-membership-changes-1)
   - [Conversations](#conversations)
     - [`client.conversations.findAll`](#clientconversationsfindall)
+    - [`client.conversations.find`](#clientconversationsfind)
   - [Mute Conversations](#mute-conversations)
     - [`client.mute.findAll`](#clientmutefindall)
     - [`client.mute.unmuteAll`](#clientmuteunmuteall)
@@ -1012,6 +1014,24 @@ client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, 
 })
 ```
 
+### `client.messages.findAttachment`
+
+Retrieves more information about an attachment, such as `name`. In some cases (e.g. when sent from a mobile phone) the name will still be missing.
+
+```js
+client.messages.findAttachment(
+  messageId: string|Message,
+  attachmentId: string
+):Promise.<MessageAttachment,Error>
+```
+
+#### Example
+
+```js
+client.messages.findAttachment(message.id, message.attachments[0].id).then(function (attachment) {
+  console.log(attachment.name, attachment.contentType)
+})
+```
 
 ## Typing Status
 
@@ -1289,6 +1309,28 @@ client.conversations.findAll().then(function (conversations) {
         conversation.counterParty.members.map(function (user) { return user.displayName }).join(', ')
       )
      }
+  })
+})
+```
+
+### `client.conversations.find`
+
+Retrieves a full `Conversation` object with all sub relationships.
+
+To save network requests, in some cases not all the information about a conversation is fetched. For example, in a group conversation, not all the members of the group are pre-loaded, and when viewing such a conversation, some users may have name as `Loading...`. In order to ensure all extra information of a group is loaded, such as the counter party and all the group members, `client.conversations.find` needs to be called.
+
+```js
+client.conversations.find(conversationId: Conversation|string):Promise.<Conversation,Error>
+```
+
+#### Example
+
+```js
+client.conversations.find(someGroupConversation.id).then(function (conversation) {
+  var group = conversation.counterParty
+  console.log('group covnersation ', group.name)
+  group.members.forEach(function (member) {
+    console.log('member', member.displayName)
   })
 })
 ```

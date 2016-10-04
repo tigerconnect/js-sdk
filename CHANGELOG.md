@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.18] - 2016-10-04
+
+### Added
+
+- `messages.findAttachment(messageId, attachmentID)` - loads extrea attachment information such as name.
+
 ## [0.1.17] - 2016-09-19
 
 - Internal fixes.
