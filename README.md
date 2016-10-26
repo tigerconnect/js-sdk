@@ -45,6 +45,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.sendToNewGroup`](#clientmessagessendtonewgroup)
     - [Message Metadata](#message-metadata)
     - [`client.messages.markAsRead`](#clientmessagesmarkasread)
+    - [`client.messages.findStatusesPerRecipient`](#clientmessagesfindstatusesperrecipient)
     - [`client.messages.recall`](#clientmessagesrecall)
     - [`client.messages.forward`](#clientmessagesforward)
   - [Message Attachments](#message-attachments)
@@ -338,7 +339,7 @@ Message status (read/delivered recipts) per user. Used in group conversations wh
 | `userId`          | `string`  | ID of `user`                                   |
 | `message`         | `Message` | Message containing the status                  |
 | `messageId`       | `string`  | ID of `message`                                |
-| `recipientStatus` | `string`  | `NEW`, `DELIVERED`, `READ`       |
+| `recipientStatus` | `string`  | `NEW`, `DELIVERED`, `READ`                     |
 
 
 ### `Conversation`
@@ -819,6 +820,31 @@ client.messages.markAsRead(conversation.unreadMessages).then(function () {
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
   else console.log('Error marking messages read')
+})
+```
+
+### `client.messages.findStatusesPerRecipient`
+
+Fetches all `message.statusesPerRecipient` for both 1 on 1 and group messages. Call this method when need to display all statuses of all recipients of the message. Returns the `message.statusesPerRecipient` array (of type `MessageStatusPerRecipient`) in the promise.
+
+`includeUsers` option indicates whether to ensure all users are also loaded.
+
+```js
+client.messages.findStatusesPerRecipient(
+  id: string|Message,
+  { includeUsers: bool = false }
+):Promise.<MessageStatusPerRecipient[],Error>
+```
+
+#### Example
+
+```js
+// message is a Message instance
+
+client.messages.findStatusesPerRecipient(message, { includeUsers: true }).then(function () {
+  message.statusesPerRecipient.forEach(function (status) {
+    console.log(status.user.displayName, status.status, status.createdAt)
+  })
 })
 ```
 
