@@ -64,9 +64,13 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.groups.destroy`](#clientgroupsdestroy)
     - [Group Member Management](#group-member-management)
     - [Listening to Group Membership Changes](#listening-to-group-membership-changes-1)
+    - [Join/Leave a group or a room \(a group with `groupType = 'ROOM'`\)](#joinleave-a-group-or-a-room-a-group-with-grouptype--room)
+    - [`client.groups.join`](#clientgroupsjoin)
+    - [`client.groups.leave`](#clientgroupsleave)
   - [Conversations](#conversations)
     - [`client.conversations.findAll`](#clientconversationsfindall)
     - [`client.conversations.find`](#clientconversationsfind)
+    - [`client.conversations.remove`](#clientconversationsremove)
   - [Mute Conversations](#mute-conversations)
     - [`client.mute.findAll`](#clientmutefindall)
     - [`client.mute.unmuteAll`](#clientmuteunmuteall)
@@ -1245,9 +1249,9 @@ client.groups.destroy('some-group-id').then(function () {
 Add/remove member(s) from a group
 
 ```js
-client.groups.addMember(groupId: string|Group, memberIds: string|User)
+client.groups.addMember(groupId: string|Group, memberId: string|User)
 client.groups.addMembers(groupId: string|Group, memberIds: string[]|User[])
-client.groups.removeMember(groupId: string|Group, memberIds: string|User)
+client.groups.removeMember(groupId: string|Group, memberId: string|User)
 client.groups.removeMembers(groupId: string|Group, memberIds: string[]|User[])
 ```
 
@@ -1307,6 +1311,40 @@ client.on('group:membership:change', function (event) {
 })
 ```
 
+### Join/Leave a group or a room (a group with `groupType = 'ROOM'`)
+
+### `client.groups.join`
+
+Join a room. Only creator can add/remove users from a group, but anyone can join a room.
+
+```js
+client.groups.join(groupId: string|Group):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.groups.join('some-group-room-id').then(function () {
+  console.log('joined room')
+})
+```
+
+### `client.groups.leave`
+
+Leave a group or a room. Also removes the roster entry (similar to `conversations.remove`)
+
+```js
+client.groups.leave(groupId: string|Group):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.groups.leave('some-group-room-id').then(function () {
+  console.log('left group')
+})
+```
+
 ## Conversations
 
 ### `client.conversations.findAll`
@@ -1358,6 +1396,26 @@ client.conversations.find(someGroupConversation.id).then(function (conversation)
   group.members.forEach(function (member) {
     console.log('member', member.displayName)
   })
+})
+```
+
+### `client.conversations.remove`
+
+Remove a conversation from roster.
+
+```js
+client.conversations.remove(
+  counterPartyType: string, // user/group
+  counterPartyId: string,
+  organizationId: string
+):Promise.<void,Error>
+```
+
+#### Example
+
+```js
+client.conversations.remove('user', 'some-user-id', 'some-org-id').then(function () {
+  console.log('conversation was deleted')
 })
 ```
 
