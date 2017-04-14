@@ -1,13 +1,13 @@
 {
   "name": "tigerconnect",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "JS (web and node) SDK for TigerText",
   "homepage": "",
   "repository": "tigerconnect/js-sdk-release",
   "author": {
-    "name": "Elad Ossadon",
-    "email": "elad@tigertext.com",
-    "url": ""
+    "name": "TigerText Developers",
+    "email": "developersupport@tigertext.com",
+    "url": "https://developer.tigertext.com/"
   },
   "main": "tigerconnect-sdk-node.min.js",
   "keywords": [
