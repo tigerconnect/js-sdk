@@ -4,6 +4,7 @@
 
 - Improve support for downloading messages on Safari by preferring to use native EventSource rather than a polyfill.
 - Greatly reduce latency when downloading messages after login.
+- Fix issue with conversations that have more than 200 messages.
 - Improve support for automatic retry of failed messages.
 - Allow failed unsent messages to be recalled, which deletes them out of the conversation locally.
 - New `conversations.unreadPriorityCount` variable tracks the number of unread priority messages.
