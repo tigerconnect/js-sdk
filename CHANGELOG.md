@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.0] - 2017-04-14
+
+- Improve support for downloading messages on Safari by preferring to use native EventSource rather than a polyfill.
+- Greatly reduce latency when downloading messages after login.
+- Improve support for automatic retry of failed messages.
+- Allow failed unsent messages to be recalled, which deletes them out of the conversation locally.
+- New `conversations.unreadPriorityCount` variable tracks the number of unread priority messages.
+
 ## [0.1.19] - 2016-10-31
 
 - Internal fixes.

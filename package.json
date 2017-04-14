@@ -1,6 +1,6 @@
 {
   "name": "tigerconnect",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "description": "JS (web and node) SDK for TigerText",
   "homepage": "",
   "repository": "tigerconnect/js-sdk-release",
@@ -13,33 +13,44 @@
   "keywords": [
     "tigertext"
   ],
+  "nyc": {
+    "statements": 80,
+    "branches": 60,
+    "lines": 80,
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "test/**/*.test.js"
+    ],
+    "cache": true
+  },
   "dependencies": {
     "autobind-decorator": "^1.3.4",
-    "babel-polyfill": "~6.16.0",
-    "babel-runtime": "~6.18.0",
+    "babel-polyfill": "~6.20.0",
     "btoa": "^1.1.2",
-    "bunyan": "^1.8.4",
+    "bunyan": "^1.8.5",
     "class-private-method-decorator": "^2.1.2",
-    "eventsource": "git+https://git@github.com/tigerconnect/eventsource.git",
+    "eventsource": "git+https://git@github.com/tigertext/eventsource.git",
     "file-saver": "^1.3.3",
-    "file-type": "^3.9.0",
+    "file-type": "^4.0.0",
     "humanize-list": "^1.0.1",
-    "invariant": "^2.2.1",
+    "invariant": "^2.2.2",
     "is-email": "^1.0.0",
-    "jshashes": "^1.0.5",
-    "lodash": "^4.16.5",
+    "jshashes": "^1.0.6",
+    "lodash": "^4.17.2",
     "lodash-bound": "^1.1.2",
     "mime": "^1.3.4",
-    "mime-db": "^1.24.0",
-    "moment": "^2.15.2",
+    "mime-db": "^1.25.0",
+    "moment": "^2.17.0",
     "node-noop": "^1.0.0",
-    "node-uuid": "^1.4.7",
-    "request": "^2.76.0",
+    "qs": "^6.1.0",
+    "request": "^2.79.0",
     "reuse-promise": "^1.1.0",
     "shallowequal": "^0.2.2",
-    "superagent": "^2.3.0",
+    "superagent": "^3.5.1",
     "superagent-prefix": "0.0.2",
-    "superagent-retry": "git+https://git@github.com/elado/superagent-retry.git#74c9a6c9ee0ee6c11aafdb10aa8eb5ea0d284cd4"
+    "uuid": "^3.0.0"
   },
   "license": {
     "type": "Commercial",

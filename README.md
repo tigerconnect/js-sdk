@@ -207,13 +207,14 @@ A user account
 
 An organization is a scope where messages are being sent. A user can be a member of multiple organizations, but messages that are being sent in organization #1 won't be visible at organization #2.
 
-| Property        | Type                  | Description                                                                    |
-|-----------------|-----------------------|--------------------------------------------------------------------------------|
-| `id`            | `string`              | ID                                                                             |
-| `name`          | `string`              | Organization name                                                              |
-| `memberCount`   | `int`                 | Number of members                                                              |
-| `conversations` | `Conversation[]`      | List of active conversations in the org for the logged in user                 |
-| `unreadCount`   | `int`                 | A sum of all unread message counts in all conversations in the organization    |
+| Property              | Type             | Description                                                                          |
+|-----------------------|------------------|--------------------------------------------------------------------------------------|
+| `id`                  | `string`         | ID                                                                                   |
+| `name`                | `string`         | Organization name                                                                    |
+| `memberCount`         | `int`            | Number of members                                                                    |
+| `conversations`       | `Conversation[]` | List of active conversations in the org for the logged in user                       |
+| `unreadCount`         | `int`            | A sum of all unread message counts in all conversations in the organization          |
+| `unreadPriorityCount` | `int`            | A sum of all unread priority message counts in all conversations in the organization |
 
 
 ### `Group`
@@ -350,19 +351,20 @@ Message status (read/delivered recipts) per user. Used in group conversations wh
 
 A collection of messages between current user and a counter party - a user or a group, within an organization.
 
-| Property            | Type              | Description                                                                               |
-|---------------------|-------------------|-------------------------------------------------------------------------------------------|
-| `id`                | `string`          | ID                                                                                        |
-| `messages`          | `Message[]`       | List of messages, exclusively of type `USER_SENT`                                         |
-| `timeline`          | `Message[]`       | List of all messages including all types, e.g. `USER_SENT` and `GROUP_MEMBERSHIP_CHANGE`  |
-| `unreadMessages`    | `Message[]`       | List of unread messages                                                                   |
-| `unreadCount`       | `int`             | A count of all unread messages in the list                                                |
-| `lastMessage`       | `Message`         | The last message in the conversation (useful when showing a list of conversation)         |
-| `counterParty`      | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type             |
-| `counterPartyId`    | `string`          | ID of `counterParty`                                                                      |
-| `counterPartyType`  | `string`          | Values: `user`, `group`                                                                   |
-| `organization`      | `Organization`    | Organization where this conversation takes place                                          |
-| `organizationId`    | `string`          | ID of `organization`                                                                      |
+| Property              | Type              | Description                                                                               |
+|-----------------------|-------------------|-------------------------------------------------------------------------------------------|
+| `id`                  | `string`          | ID                                                                                        |
+| `messages`            | `Message[]`       | List of messages, exclusively of type `USER_SENT`                                         |
+| `timeline`            | `Message[]`       | List of all messages including all types, e.g. `USER_SENT` and `GROUP_MEMBERSHIP_CHANGE`  |
+| `unreadMessages`      | `Message[]`       | List of unread messages                                                                   |
+| `unreadCount`         | `int`             | A count of all unread messages in the list                                                |
+| `unreadPriorityCount` | `int`             | A count of all unread priority messages in the list                                       |
+| `lastMessage`         | `Message`         | The last message in the conversation (useful when showing a list of conversation)         |
+| `counterParty`        | `User/Group`      | Either the `recipient` or the `group` value, depends on the conversation type             |
+| `counterPartyId`      | `string`          | ID of `counterParty`                                                                      |
+| `counterPartyType`    | `string`          | Values: `user`, `group`                                                                   |
+| `organization`        | `Organization`    | Organization where this conversation takes place                                          |
+| `organizationId`      | `string`          | ID of `organization`                                                                      |
 
 
 
