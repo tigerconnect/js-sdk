@@ -2,7 +2,7 @@
 
 This repository contains binary distributions of JS SDK released by [TigerConnect](http://tigertext.com/tigerconnect).
 
-If you have any questions, comments, or issues related to this repository then please contact the team by emailing [tigerconnect@tigertext.com](mailto:tigerconnect@tigertext.com).
+If you have any questions, comments, or issues related to this repository then please contact the team by emailing [developersupport@tigertext.com](mailto:developersupport@tigertext.com).
 
 <!-- MarkdownTOC depth=3 autolink=true bracket=round -->
 
