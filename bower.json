@@ -5,9 +5,9 @@
   "main": "tigerconnect-sdk-web.min.js",
   "authors": [
     {
-      "name": "Elad Ossadon",
-      "email": "elad@tigertext.com",
-      "url": ""
+      "name": "TigerText Developers",
+      "email": "developersupport@tigertext.com",
+      "url": "https://developer.tigertext.com/"
     }
   ],
   "license": {
