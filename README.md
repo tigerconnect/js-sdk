@@ -48,6 +48,9 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.messages.findStatusesPerRecipient`](#clientmessagesfindstatusesperrecipient)
     - [`client.messages.recall`](#clientmessagesrecall)
     - [`client.messages.forward`](#clientmessagesforward)
+    - [`client.messages.resend`](#clientmessagesresend)
+    - [`client.messages.previewMessage`](#clientmessagespreviewmessage)
+    - [`client.messages.endPreviewMessage`](#clientmessagesendpreviewmessage)
   - [Message Attachments](#message-attachments)
     - [Sending an attachment](#sending-an-attachment)
     - [Downloading an attachment](#downloading-an-attachment)
@@ -147,7 +150,7 @@ client.signIn('user@mail.com', 's3cr3t', { udid: 'unique-device-id' }).then(func
 
 function onSignedIn(session) {
   console.log('Signed in as', session.user.displayName)
-  
+
   client.messages.sendToUser(
     'someone@mail.com',
     'hello!'
@@ -156,7 +159,7 @@ function onSignedIn(session) {
   })
 
   client.events.connect()
-  
+
   client.on('message', function (message) {
     console.log(
       'message event',
@@ -914,6 +917,72 @@ client.messages.forward('someMessageToForwardId', 'someUserId', {
 })
 ```
 
+### `client.messages.resend`
+
+Resend a copy of the message to the same recipient(s).
+
+```js
+client.messages.resend(
+  id: string|Message,
+  {
+    priority: ?string|?number,
+  }
+):Promise.<void|Message,Error>
+```
+
+- The `priority` option, if provided, changes the priority of the message. Currently we only support changing the priority from NORMAL to HIGH.
+
+#### Example
+
+```js
+client.messages.resend('someMessageToResendId', {
+  priority: 'HIGH',
+}).then(function (newMessage) {
+  console.log(
+    'the message', newMessage.body,
+    'is forwarded', newMessage.isForwarded,
+    'with priority', newMessage.priority,
+  )
+}, function (err) {
+  console.log('Error resending message')
+})
+```
+
+### `client.messages.previewMessage`
+
+previewMessage creates a temporary copy of the message with the supplied options. The new message will not belong to any conversation.
+
+```js
+client.messages.previewMessage(
+  id: string|Message,
+  {
+    priority: ?string|?number,
+  }
+)
+```
+
+- The `priority` option, if provided, changes the priority of the message. Currently we only support changing the priority from NORMAL to HIGH.
+
+#### Example
+
+```js
+client.messages.previewMessage('someMessageToPreviewId', {
+  priority: 'HIGH',
+}).then(function (newMessage) {
+  console.log(
+    'the message', newMessage.body,
+    'with priority', newMessage.priority,
+  )
+})
+```
+
+### `client.messages.endPreviewMessage`
+
+endPreviewMessage deletes the copy of the previewed message.
+
+```js
+client.messages.endPreviewMessage()
+```
 
 ## Message Attachments
 

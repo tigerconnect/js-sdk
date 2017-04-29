@@ -1,5 +1,10 @@
 # Change Log
 
+## TBD
+
+- Add `resend()` function to support resending a message.
+- Add `previewMessage()` and `endPreviewMessage()` to support creating a temporary copy of a message for preview purposes.
+
 ## [0.2.1] - 2017-04-14
 
 - Fix issue with conversations that have more than 200 messages.
