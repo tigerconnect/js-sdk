@@ -410,9 +410,14 @@ Sets all future API requests to be on behalf of the user.
 client.signIn(
   userId: string,
   password: string,
-  { udid: string }
+  { udid: string, refreshUser: ?bool = true }
 ):Promise.<Session,Error>
 ```
+
+#### Options
+
+- `refreshUser: ?bool` - Whether to immediately refresh the user information during sign in (default: `true`); if you set this to `false`, be sure to do a `client.users.findMe({ bypassCache: true })` call later to fully load the user
+- `udid: string` - A unique identifier for the device
 
 #### Example
 
