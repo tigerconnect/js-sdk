@@ -1,7 +1,8 @@
 # Change Log
 
-## [1.0.0] - TBD
+## [1.0.0] - 2017-05-31
 
+- Improve EventSource compatibility with IE 11 so that downloading messages works faster in that browser.
 - Add `resend()` function to support resending a message.
 - Add `previewMessage()` and `endPreviewMessage()` to support creating a temporary copy of a message for preview purposes.
 - signIn: Take new optional parameter `refreshUser`. If false, do not immediately attempt another AJAX call to refresh the user info.
