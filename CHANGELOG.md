@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.2] - 2017-06-02
+
+- Fix issue where user information like `emails` was not being populated by default.
+- Move the github repo from tigerconnect/js-sdk-release to tigertext/js-sdk-release.
+
 ## [1.0.0] - 2017-05-31
 
 - Improve EventSource compatibility with IE 11 so that downloading messages works faster in that browser.
