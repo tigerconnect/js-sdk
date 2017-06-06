@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.3] - 2017-06-06
+
+- `forward()`: When used on a high-priority message without an explicit priority in the function parameters, make the forwarded message high-priority.
+
 ## [1.0.2] - 2017-06-02
 
 - Fix issue where user information like `emails` was not being populated by default.
