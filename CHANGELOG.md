@@ -1,5 +1,13 @@
 # Change Log
 
+## [2.0.0] - 2017-06-16
+
+- **Breaking change**: Rename `groupType` enum value 'ROOM' to 'FORUM'.
+  - This applies to the `groupType` property of `client.groups` members.
+  - Change the `types` parameter of `client.search.query` to accept 'forum' instead of 'room'.
+- Improve reliability of message delivery after the browser has been idle for a long time, and make it less verbose about re-establishing connections on IE 11.
+- Change default value for `clearTypingStatusTimeout` config option from 15 seconds to 3 seconds for improved responsiveness.
+
 ## [1.0.3] - 2017-06-06
 
 - `forward()`: When used on a high-priority message without an explicit priority in the function parameters, make the forwarded message high-priority.

@@ -67,7 +67,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [`client.groups.destroy`](#clientgroupsdestroy)
     - [Group Member Management](#group-member-management)
     - [Listening to Group Membership Changes](#listening-to-group-membership-changes-1)
-    - [Join/Leave a group or a room \(a group with `groupType = 'ROOM'`\)](#joinleave-a-group-or-a-room-a-group-with-grouptype--room)
+    - [Join/Leave a group or a forum \(a group with `groupType = 'FORUM'`\)](#joinleave-a-group-or-a-forum-a-group-with-grouptype--forum)
     - [`client.groups.join`](#clientgroupsjoin)
     - [`client.groups.leave`](#clientgroupsleave)
   - [Conversations](#conversations)
@@ -232,9 +232,9 @@ A group of users in a specific organization. Points to a single conversation.
 | `description`     | `?string`             | Group description                                                              |
 | `members`         | `User[]`              | List of users in this group.                                                   |
 | `memberIds`       | `string[]`            | IDs of `members`                                                               |
-| `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
+| `memberCount`     | `int`                 | Number of members (`FORUM` type doesn't have `members`)                         |
 | `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
-| `groupType`       | `?string`             | `GROUP`, `ROOM`                                                                |
+| `groupType`       | `?string`             | `GROUP`, `FORUM`                                                                |
 | `organizationId`  | `string`              | ID of `organization`                                                           |
 | `organization`    | `Organization`        | Organization where this conversation takes place                               |
 | `conversationId`  | `string`              | ID of `conversation`                                                           |
@@ -251,7 +251,7 @@ A distribution list
 | `id`              | `string`              | ID                                                                             |
 | `name`            | `string`              | Group name                                                                     |
 | `displayName`     | `string`              | Same as `name`                                                                 |
-| `memberCount`     | `int`                 | Number of members (`ROOM` type doesn't have `members`)                         |
+| `memberCount`     | `int`                 | Number of members (`FORUM` type doesn't have `members`)                         |
 | `avatarUrl`       | `?string`             | Full URL of group picture                                                      |
 | `organizationId`  | `string`              | ID of `organization`                                                           |
 | `organization`    | `Organization`        | Organization where this conversation takes place                               |
@@ -302,7 +302,7 @@ This message was sent by a user and may contain `body`, `attachments`, or `metad
 
 ##### `GROUP_MEMBERSHIP_CHANGE`
 
-This message is a log message of a group members change, and only available in group conversations. It shows when a group member adds or removes another member, or when someone joins/leaves the group (join event is available only in groups with `groupType='ROOM'`).
+This message is a log message of a group members change, and only available in group conversations. It shows when a group member adds or removes another member, or when someone joins/leaves the group (join event is available only in groups with `groupType='FORUM'`).
 
 This type of message generates a `body` text such as `John Doe added Alice to this group` or `Bob left this group`.
 
@@ -1350,7 +1350,7 @@ This event fires when:
 - A group member was added to a group
 - A group member was removed from a group
 - A group member left a group
-- A group member joined a group with a `ROOM` type
+- A group member joined a group with a `FORUM` type
 
 The event contains the following attributes:
 
@@ -1387,11 +1387,11 @@ client.on('group:membership:change', function (event) {
 })
 ```
 
-### Join/Leave a group or a room (a group with `groupType = 'ROOM'`)
+### Join/Leave a group or a forum (a group with `groupType = 'FORUM'`)
 
 ### `client.groups.join`
 
-Join a room. Only creator can add/remove users from a group, but anyone can join a room.
+Join a forum. Only creator can add/remove users from a group, but anyone can join a forum.
 
 ```js
 client.groups.join(groupId: string|Group):Promise.<void,Error>
@@ -1400,14 +1400,14 @@ client.groups.join(groupId: string|Group):Promise.<void,Error>
 #### Example
 
 ```js
-client.groups.join('some-group-room-id').then(function () {
-  console.log('joined room')
+client.groups.join('some-group-forum-id').then(function () {
+  console.log('joined forum')
 })
 ```
 
 ### `client.groups.leave`
 
-Leave a group or a room. Also removes the roster entry (similar to `conversations.remove`)
+Leave a group or a forum. Also removes the roster entry (similar to `conversations.remove`)
 
 ```js
 client.groups.leave(groupId: string|Group):Promise.<void,Error>
@@ -1416,7 +1416,7 @@ client.groups.leave(groupId: string|Group):Promise.<void,Error>
 #### Example
 
 ```js
-client.groups.leave('some-group-room-id').then(function () {
+client.groups.leave('some-group-forum-id').then(function () {
   console.log('left group')
 })
 ```
@@ -1663,7 +1663,7 @@ client.search.query({
 })
 ```
 
-`types` may contain any or all of `'user'`, `'group'`, `'room'`, `'distributionList'`.
+`types` may contain any or all of `'user'`, `'group'`, `'forum'`, `'distributionList'`.
 
 `includeMetadata: true` will also load all metadata for all entities, assigning them into each `result.metadata`
 
