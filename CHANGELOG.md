@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.0.1] - 2017-06-28
+
+- Fix issue where some failed messages were not able to be retried.
+- Decrease the likelihood of messages to fail during peak hours.
+
 ## [2.0.0] - 2017-06-16
 
 - **Breaking change**: Rename `groupType` enum value 'ROOM' to 'FORUM'.
