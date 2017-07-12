@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.0.2] - 2017-07-11
+
+- Work around Selenium on Firefox issue which would cause finding selectors to be blocked.
+
 ## [2.0.1] - 2017-06-28
 
 - Fix issue where some failed messages were not able to be retried.
