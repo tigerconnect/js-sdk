@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.0.3] - 2017-07-18
+
+- Add `displayName` field to `organization` object. This will transform 'TigerText Customer' into 'Contacts'.
+- Document `client.messages.retrySend()` API endpoint for safely re-attempting to send a failed message without duplication.
+
 ## [2.0.2] - 2017-07-11
 
 - Work around Selenium on Firefox issue which would cause finding selectors to be blocked.

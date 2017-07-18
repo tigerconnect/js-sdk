@@ -46,6 +46,7 @@ If you have any questions, comments, or issues related to this repository then p
     - [Message Metadata](#message-metadata)
     - [`client.messages.markAsRead`](#clientmessagesmarkasread)
     - [`client.messages.findStatusesPerRecipient`](#clientmessagesfindstatusesperrecipient)
+    - [`client.messages.retrySend`](#clientmessagesretrysend)
     - [`client.messages.recall`](#clientmessagesrecall)
     - [`client.messages.forward`](#clientmessagesforward)
     - [`client.messages.resend`](#clientmessagesresend)
@@ -214,6 +215,7 @@ An organization is a scope where messages are being sent. A user can be a member
 |-----------------------|------------------|--------------------------------------------------------------------------------------|
 | `id`                  | `string`         | ID                                                                                   |
 | `name`                | `string`         | Organization name                                                                    |
+| `displayName`         | `string`         | Organization's display name                                                          |
 | `memberCount`         | `int`            | Number of members                                                                    |
 | `conversations`       | `Conversation[]` | List of active conversations in the org for the logged in user                       |
 | `unreadCount`         | `int`            | A sum of all unread message counts in all conversations in the organization          |
@@ -483,7 +485,7 @@ client.signOut():Promise.<Null,Error>
 #### Example
 
 ```js
-client.signOut().then(function () {
+client.signOut().then(function() {
   console.log('Signed out successfully')
 })
 ```
@@ -499,7 +501,7 @@ When event stream opens for the first time for a user, the entire message hisory
 Event stream contains entries about new messages, presence changes, read/deliverered recipts, group membership changes etc. The SDK takes care of all these events and applies the changes automatically to the internal data store, as long as the event stream is opened.
 
 ```js
-client.events.connect().then(function () { console.log('listening to new events') })
+client.events.connect().then(function() { console.log('listening to new events') })
 ```
 
 The event stream is divided into two phases: offline messages (including history) and new messages. In order to show the most up-to-date UI with all conversations and messages, all the offline messages should be downloaded. The stopping point of the offline messages is marked with the event `messages:offline:stop`:
@@ -508,7 +510,7 @@ The event stream is divided into two phases: offline messages (including history
 ```js
 client.events.connect()
 
-client.on('messages:offline:stop', function () {
+client.on('messages:offline:stop', function() {
   console.log('all offline messages are downloaded!')
 })
 ```
@@ -819,7 +821,7 @@ client.messages.markAsRead(
 ```js
 // mark a single message as read
 
-client.messages.markAsRead('some-message-id').then(function () {
+client.messages.markAsRead('some-message-id').then(function() {
   console.log('message marked as read!')
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
@@ -829,7 +831,7 @@ client.messages.markAsRead('some-message-id').then(function () {
 
 // mark all unread messages in a conversation as read
 
-client.messages.markAsRead(conversation.unreadMessages).then(function () {
+client.messages.markAsRead(conversation.unreadMessages).then(function() {
   console.log('messages marked as read!')
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
@@ -855,31 +857,47 @@ client.messages.findStatusesPerRecipient(
 ```js
 // message is a Message instance
 
-client.messages.findStatusesPerRecipient(message, { includeUsers: true }).then(function () {
+client.messages.findStatusesPerRecipient(message, { includeUsers: true }).then(function() {
   message.statusesPerRecipient.forEach(function (status) {
     console.log(status.user.displayName, status.status, status.createdAt)
   })
 })
 ```
 
-### `client.messages.recall`
+### `client.messages.retrySend`
 
-Lets current user recall their own message.
+Re-attempt sending a message that previously failed. This will safely prevent sending duplicate messages if the recipient actually received the message at an earlier time.
 
 ```js
-client.messages.recall(
-  groupId: string|Group,
-  body: string,
-  {
-    organizationId: ?string
-  }
-):Promise.<void,Error>
+client.messages.retrySend(
+  id: string|Message
+):Promise.<Message,Error>
 ```
 
 #### Example
 
 ```js
-client.messages.recall('some-message-id').then(function () {
+client.messages.retrySend('some-message-id').then(function() {
+  console.log('Message retried successfully, or was already sent')
+}, function (err) {
+  console.log('Error while retrying message')
+})
+```
+
+### `client.messages.recall`
+
+Lets current user recall their own message. For each message to recall, returns `true` if the message at that position was recalled.
+
+```js
+client.messages.recall(
+  id: string|Message|string[]|Message[]
+):Promise.<boolean[],Error>
+```
+
+#### Example
+
+```js
+client.messages.recall('some-message-id').then(function() {
   console.log('message recalled!')
 }, function (err) {
   if (err.code == 'permission-denied') console.log('Current user cannot recall this message')
@@ -1113,7 +1131,7 @@ client.messages.downloadAttachmentToFile(
 ###### Example
 
 ```js
-client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, '/tmp/file.png').then(function () {
+client.messages.downloadAttachmentToFile(message.id, message.attachments[0].id, '/tmp/file.png').then(function() {
   // do something with '/tmp/file.png'
 }, function (err) {
   console.log('Error downloading attachment')
@@ -1315,7 +1333,7 @@ client.groups.destroy(groupId: string|Group):Promise.<void,Error>
 #### Example
 
 ```js
-client.groups.destroy('some-group-id').then(function () {
+client.groups.destroy('some-group-id').then(function() {
   console.log('deleted group')
 })
 ```
@@ -1334,11 +1352,11 @@ client.groups.removeMembers(groupId: string|Group, memberIds: string[]|User[])
 #### Example
 
 ```js
-client.groups.addMembers('some-group-id', ['some-user-5', 'some-user-6']).then(function () {
+client.groups.addMembers('some-group-id', ['some-user-5', 'some-user-6']).then(function() {
   console.log('added!')
 })
 
-client.groups.removeMembers('some-group-id', ['some-user-7', 'some-user-8']).then(function () {
+client.groups.removeMembers('some-group-id', ['some-user-7', 'some-user-8']).then(function() {
   console.log('removed!')
 })
 ```
@@ -1400,7 +1418,7 @@ client.groups.join(groupId: string|Group):Promise.<void,Error>
 #### Example
 
 ```js
-client.groups.join('some-group-forum-id').then(function () {
+client.groups.join('some-group-forum-id').then(function() {
   console.log('joined forum')
 })
 ```
@@ -1416,7 +1434,7 @@ client.groups.leave(groupId: string|Group):Promise.<void,Error>
 #### Example
 
 ```js
-client.groups.leave('some-group-forum-id').then(function () {
+client.groups.leave('some-group-forum-id').then(function() {
   console.log('left group')
 })
 ```
@@ -1490,7 +1508,7 @@ client.conversations.remove(
 #### Example
 
 ```js
-client.conversations.remove('user', 'some-user-id', 'some-org-id').then(function () {
+client.conversations.remove('user', 'some-user-id', 'some-org-id').then(function() {
   console.log('conversation was deleted')
 })
 ```
