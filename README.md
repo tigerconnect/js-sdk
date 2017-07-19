@@ -1161,11 +1161,11 @@ client.messages.findAttachment(message.id, message.attachments[0].id).then(funct
 
 ### `client.typingStatus.startTyping`
 
-Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has started typing in a conversation.
+Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has started typing in a conversation. If `counterPartyId` is undefined, take no action.
 
 ```js
 client.typingStatus.startTyping(
-  counterPartyId: string|User|Group
+  counterPartyId: string|User|Group|void
 ):Promise.<void,Error>
 ```
 
@@ -1178,11 +1178,11 @@ client.typingStatus.startTyping('some-group-id')
 
 ### `client.typingStatus.stopTyping`
 
-Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has stopped typing in a conversation.
+Sends a notification to an online user (in 1:1 conversation) or group members (in group conversations) that current user has stopped typing in a conversation. If `counterPartyId` is undefined, take no action.
 
 ```js
 client.typingStatus.stopTyping(
-  counterPartyId: string|User|Group
+  counterPartyId: string|User|Group|void
 ):Promise.<void,Error>
 ```
 

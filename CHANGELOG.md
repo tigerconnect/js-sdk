@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.0.4] - 2017-07-19
+
+- Suppress type error when using `undefined` as an argument to `client.typingStatus.startTyping()` and `client.typingStatus.stopTyping()`.
+
 ## [2.0.3] - 2017-07-18
 
 - Add `displayName` field to `organization` object. This will transform 'TigerText Customer' into 'Contacts'.
