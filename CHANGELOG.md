@@ -1,5 +1,10 @@
 # Change Log
 
+## [2.0.5] - 2017-07-26
+
+- Debounce `client.typingStatus.startTyping()` and `client.typingStatus.stopTyping()` calls to the server with a 2-second window so that the browser.
+- This should address an issue with messages not being sent because the browser is stuck queueing many `startTyping` calls.
+
 ## [2.0.4] - 2017-07-19
 
 - Suppress type error when using `undefined` as an argument to `client.typingStatus.startTyping()` and `client.typingStatus.stopTyping()`.
