@@ -1,5 +1,10 @@
 # Change Log
 
+## [3.0.1] - 2017-08-15
+
+- Fix some dependencies that are used in the nodejs bundle of this module.
+- Improve the speed of running `npm install` on this module.
+
 ## [3.0.0] - 2017-08-15
 
 - **Breaking change**: Run `browserUnload` event hooks during window `unload` handler instead of `beforeunload` handler so that UI code can trap `beforeunload` to prompt the user with an alert if it needs to.
