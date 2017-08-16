@@ -1,5 +1,13 @@
 # Change Log
 
+## [3.0.0] - 2017-08-15
+
+- **Breaking change**: Run `browserUnload` event hooks during window `unload` handler instead of `beforeunload` handler so that UI code can trap `beforeunload` to prompt the user with an alert if it needs to.
+- `client.messages.previewMessage()` now preserves the value of `statusesPerRecipient` from the original message.
+- A maximum of 50 messages will be ACK'd each second to ensure even load distribution to individual server nodes.
+- A maximum of 2 connections will be allowed to send ACK payloads, as an additional precaution to ensure that messages can be sent quickly without tying up too many network connections to the server.
+- `client.messages.downloadAttachment()` may now be called more than once to download the same attachment again.
+
 ## [2.0.5] - 2017-07-26
 
 - Debounce `client.typingStatus.startTyping()` and `client.typingStatus.stopTyping()` calls to the server with a 2-second window.
