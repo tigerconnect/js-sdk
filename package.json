@@ -11,7 +11,11 @@
   },
   "main": "tigerconnect-sdk-node.min.js",
   "keywords": [
-    "tigertext"
+    "tigerconnect",
+    "tigertext",
+    "communications",
+    "messenger",
+    "sdk"
   ],
   "nyc": {
     "statements": 80,

@@ -76,7 +76,7 @@ const client = new TigerConnect.Client(config);
 
 ## Contact
 
-If you have any questions please reach out to the TigerConnect team any time by emailing [developersupport@tigerconnect.com](mailto:developersupport@tigerconnect.com?Subject=JS%20SDK%20Help.
+If you have any questions please reach out to the TigerConnect team any time by emailing [developersupport@tigerconnect.com](mailto:developersupport@tigerconnect.com?Subject=JS%20SDK%20Help).
 
 ## License
 
