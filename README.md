@@ -1,16 +1,5 @@
 # TigerConnect JS SDK
 
-<!-- MarkdownTOC depth=3 autolink=true bracket=round -->
-
-  - [Overview](#overview)
-  - [Installation](#installation)
-    - [Web](#web)
-    - [Node](#node)
-  - [Contact](#contact)
-  - [License](#license)
-
-<!-- /MarkdownTOC -->
-
 ## Overview
 
 The TigerConnect JS SDK provides a simple way to enhance your web applications with intelligent, secure messaging from TigerConnect.
