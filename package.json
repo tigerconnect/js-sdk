@@ -2,12 +2,12 @@
   "name": "tigerconnect",
   "version": "3.0.1",
   "description": "JS (web and node) SDK for TigerText",
-  "homepage": "",
-  "repository": "tigertext/js-sdk-release",
+  "homepage": "https://tigerconnect.github.io/js-sdk/",
+  "repository": "tigerconnect/js-sdk",
   "author": {
     "name": "TigerText Developers",
-    "email": "developersupport@tigertext.com",
-    "url": "https://developer.tigertext.com/"
+    "email": "developersupport@tigerconnect.com",
+    "url": "https://tigerconnect.github.io/js-sdk/"
   },
   "main": "tigerconnect-sdk-node.min.js",
   "keywords": [
@@ -54,6 +54,7 @@
   },
   "license": {
     "type": "Commercial",
-    "url": "http://www.tigertext.com/developer-terms-of-use/"
-  }
+    "url": "https://tigerconnect.com/terms/end-user-terms-use-license-agreement/"
+  },
+  "browser": "tigerconnect-sdk-web.min.js"
 }
