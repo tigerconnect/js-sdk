@@ -1,5 +1,62 @@
 # Change Log
 
+## [7.3.0] - 2019-09-30
+
+### Overview
+
+- Extensive SDK documentation is now available at <https://tigerconnect.github.io/js-sdk/>, which includes Quickstart guides for Android SDK, iOS SDK, and JS SDK, along with further reference material for the JS SDK.
+- It is recommended to review this documentation, since many JS SDK calls have changed since the last SDK release. Many of these changes are a result of the items listed in the "Performance Improvements" section below.
+- The release repository has been moved to <https://github.com/tigerconnect/js-sdk>.
+- Support for the following features has been implemented but not yet fully documented. Please contact your TigerConnect support representative for further information and pricing plans for these features.
+  - Roles and Role Tags
+  - Role Escalations
+  - EHR Connect
+  - Offline Notifications - see "Offline Notifications" section below
+
+### Performance Improvements
+
+- The JS SDK will no longer download every message when executing `events.connect()`, which will signficantly improve application load performance. Please read <https://tigerconnect.github.io/js-sdk/quickstart/js/getting-inbox> for further details.
+- Message expiration is now implemented more performantly, and will no longer cause lag to user input (such as typing messages) in IE 11.
+- Many other performance improvements have been implemented throughout the SDK based on feedback from customers who utilize the TigerConnect Messenger website at <https://login.tigerconnect.com/app/messenger/index.html>.
+
+### General Changes
+
+- **Breaking change**: It is now required to pass `partnerName` as a config setting during `new TigerConnect.Client()` calls. Please contact your representative to determine the correct value to use for your organization.
+- **Breaking change**: The `.off()` method has been removed from anything which has an `.on()` method; use `.removeListener()` instead of `.off()`
+- The SDK will now automatically sign out when the browser window is closed.
+- `client.messages.send()` and `client.messages.forward()` will now use firstName instead of displayName of initial group members when creating new groups without a predefined group name.
+- The `includeMetadata` option has been removed from `client.search.query()`. Metadata will now always be returned.
+- The `client.user.find()` command has been modified to accept an optional `organizationId` parameter. It is recommended to always supply that parameter.
+
+### Offline Notifications
+
+- The `client.notifications` API implements offline notifications, and is intended to be used as an optional feature while the user is logged out due to inactivity.
+- While connected, this API emits events containing anonymized message content and unread counts which are suitable for displaying in operating system notifications or browser notifications.
+- This API is used internally by the TigerConnect Desktop App.
+
+### Known Issues
+
+The following issues are present in this SDK release and are planned to be fixed in an upcoming SDK or Platform release:
+
+* `conversations.fetchTimeline()`:
+  * The `markAsDelivered` parameter does not yet work as the documentation describes, and will be `false` by default instead of `true`.
+* `conversations.selectConversation()`:
+  * The `markAsDelivered` parameter does not yet work as the documentation describes, and will effectively always be `false`.
+  * The `minItemsToFetch` parameter does not yet work as the documentation describes, and will effectively always be `20`.
+* In the `Conversation` model:
+  * `firstUnreadMessage` will have an incorrect value in some situations
+  * `isUnread` will have an incorrect value in some situations
+  * `highestSortNumber` is sometimes incorrect when adding a user to an existing group
+* In the `Organization` model:
+  * `organization.conversations` will sometimes be sorted incorrectly, due to the conversation having an incorrect `highestSortNumber` value.
+  * Messages sent to a broadcast list may cause an invalid `last_message` object to be provided in any 1-on-1 conversations with users who are in that broadcast list.
+  * The `last_message` field will sometimes be missing or contain a message which is not the last message in that conversation.
+* When a user joins a private group, full conversation history is shown from before the user has joined, but it should only show the messages sent while the user is part of the group.
+* Messages sent while the user has Do-Not-Disturb Auto-forwarding enabled:
+  * Will not be sent to the auto-forward recipient
+  * Will not cause an auto-reply message to be sent back to the original sender of the message
+  * May cause an error to be logged to the JS console
+
 ## [3.0.1] - 2017-08-15
 
 - Fix some dependencies that are used in the nodejs bundle of this module.
