@@ -11,7 +11,6 @@
   - Roles and Role Tags
   - Role Escalations
   - EHR Connect
-  - Offline Notifications - see "Offline Notifications" section below
 
 ### Performance Improvements
 
@@ -33,6 +32,7 @@
 - The `client.notifications` API implements offline notifications, and is intended to be used as an optional feature while the user is logged out due to inactivity.
 - While connected, this API emits events containing anonymized message content and unread counts which are suitable for displaying in operating system notifications or browser notifications.
 - This API is used internally by the TigerConnect Desktop App.
+- Documentation has not yet been written for this API. Please contact your TigerConnect support representative if you are interested in using it.
 
 ### Known Issues
 
