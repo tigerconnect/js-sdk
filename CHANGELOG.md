@@ -49,8 +49,8 @@ The following issues are present in this SDK release and are planned to be fixed
   * `highestSortNumber` is sometimes incorrect when adding a user to an existing group
 * In the `Organization` model:
   * `organization.conversations` will sometimes be sorted incorrectly, due to the conversation having an incorrect `highestSortNumber` value.
-  * Messages sent to a broadcast list may cause an invalid `last_message` object to be provided in any 1-on-1 conversations with users who are in that broadcast list.
-  * The `last_message` field will sometimes be missing or contain a message which is not the last message in that conversation.
+  * Messages sent to a broadcast list may cause an invalid `lastMessage` object to be provided in any 1-on-1 conversations with users who are in that broadcast list.
+  * The `lastMessage` field will sometimes be missing or contain a message which is not the last message in that conversation.
 * When a user joins a private group, full conversation history is shown from before the user has joined, but it should only show the messages sent while the user is part of the group.
 * Messages sent while the user has Do-Not-Disturb Auto-forwarding enabled:
   * Will not be sent to the auto-forward recipient
