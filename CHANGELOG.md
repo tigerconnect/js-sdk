@@ -20,7 +20,7 @@
 
 ### General Changes
 
-- **Breaking change**: It is now required to pass `partnerName` as a config setting during `new TigerConnect.Client()` calls. Please contact your representative to determine the correct value to use for your organization.
+- **Breaking change**: It is now required to pass `partnerName` as a config setting during `new TigerConnect.Client()` calls. Please contact your TigerConnect support representative to determine the correct value for your SDK integration.
 - **Breaking change**: The `.off()` method has been removed from anything which has an `.on()` method; use `.removeListener()` instead of `.off()`
 - The SDK will now automatically sign out when the browser window is closed.
 - `client.messages.send()` and `client.messages.forward()` will now use firstName instead of displayName of initial group members when creating new groups without a predefined group name.
