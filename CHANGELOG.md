@@ -39,10 +39,10 @@
 The following issues are present in this SDK release and are planned to be fixed in an upcoming SDK or Platform release:
 
 * `conversations.fetchTimeline()`:
-  * The `markAsDelivered` parameter does not yet work as the documentation describes, and will be `false` by default instead of `true`.
+  * The `markAsDelivered` parameter is ignored, and the fetched messages will always be marked as Delivered. Please contact your TigerConnect support representative if you are interested in being able to fetch messages without automatically marking them as Delivered.
 * `conversations.selectConversation()`:
-  * The `markAsDelivered` parameter does not yet work as the documentation describes, and will effectively always be `false`.
-  * The `minItemsToFetch` parameter does not yet work as the documentation describes, and will effectively always be `20`.
+  * The `markAsDelivered` parameter is ignored, and the fetched messages will always be marked as Delivered. Please contact your TigerConnect support representative if you are interested in being able to fetch messages without automatically marking them as Delivered.
+  * The `minItemsToFetch` parameter does not yet work as the documentation describes, and will effectively always be `20`. This will be fixed in the next SDK release.
 * In the `Conversation` model:
   * `firstUnreadMessage` will have an incorrect value in some situations
   * `isUnread` will have an incorrect value in some situations
