@@ -56,6 +56,7 @@ The following issues are present in this SDK release and are planned to be fixed
   * Will not be sent to the auto-forward recipient
   * Will not cause an auto-reply message to be sent back to the original sender of the message
   * May cause an error to be logged to the JS console
+* More polyfills are installed than are actually required by the JS SDK; this will be reduced in the next SDK release
 
 ## [3.0.1] - 2017-08-15
 
