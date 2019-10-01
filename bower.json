@@ -1,23 +1,27 @@
 {
   "name": "tigerconnect",
   "version": "3.0.1",
-  "description": "JS (web and node) SDK for TigerText",
+  "description": "JS (web and node) SDK for TigerConnect",
   "main": "tigerconnect-sdk-web.min.js",
   "authors": [
     {
-      "name": "TigerText Developers",
-      "email": "developersupport@tigertext.com",
-      "url": "https://developer.tigertext.com/"
+      "name": "TigerConnect Developers",
+      "email": "developersupport@tigerconnect.com",
+      "url": "https://tigerconnect.github.io/js-sdk/"
     }
   ],
   "license": {
     "type": "Commercial",
-    "url": "http://www.tigertext.com/developer-terms-of-use/"
+    "url": "https://tigerconnect.com/terms/end-user-terms-use-license-agreement/"
   },
   "keywords": [
-    "tigertext"
+    "tigerconnect",
+    "tigertext",
+    "communications",
+    "messenger",
+    "sdk"
   ],
-  "homepage": "https://github.com/tigerconnect/js-sdk",
+  "homepage": "https://tigerconnect.github.io/js-sdk/",
   "moduleType": [
     "globals"
   ],
@@ -25,6 +29,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "public",
     "test",
     "tests"
   ]

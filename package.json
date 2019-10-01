@@ -1,11 +1,11 @@
 {
   "name": "tigerconnect",
   "version": "3.0.1-docsonly3",
-  "description": "JS (web and node) SDK for TigerText",
+  "description": "JS (web and node) SDK for TigerConnect",
   "homepage": "https://tigerconnect.github.io/js-sdk/",
   "repository": "tigerconnect/js-sdk",
   "author": {
-    "name": "TigerText Developers",
+    "name": "TigerConnect Developers",
     "email": "developersupport@tigerconnect.com",
     "url": "https://tigerconnect.github.io/js-sdk/"
   },
