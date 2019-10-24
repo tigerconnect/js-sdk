@@ -1,5 +1,53 @@
 # Change Log
 
+## [7.7.0] - 2019-10-24
+
+### General Changes
+
+- `events.connect()`:
+  - The contract has been changed to not return a `Promise`.
+  - The connection should be recovered more quickly after the computer goes offline, and will no longer emit `console.log` messages when this happens.
+
+### Polyfills
+
+- If you are using automatically-installed polyfills:
+  - The number of polyfills has been reduced to the minimum set that is used by the SDK.
+  - Feel free to review the [Polyfills section of the Installation docs](https://tigerconnect.github.io/js-sdk/quickstart/js/installation#polyfills) for details on the exact polyfills which are automatically included.
+- If you are using manually-specified polyfills:
+  - The SDK will now throw an error if the right polyfills have not been provided.
+  - Please review the [Polyfills section of the Installation docs](https://tigerconnect.github.io/js-sdk/quickstart/js/installation#polyfills) for details on the exact polyfills which should be included.
+
+### Fixes
+
+- Fix issue where `conversations.markAsDelivered()` call may fail with 400 status.
+- `conversations.fetchTimeline()`:
+  - Fix timing issue where new messages did not appear in `conversation.timeline` until the second time the function is called.
+- `conversations.selectConversation()`:
+  - The `minItemsToFetch` parameter now works as the documentation describes.
+  - Fix timing issue where new messages did not appear in `conversation.timeline` until the second time the function is called.
+- In the `Organization` model:
+  - `organization.conversations` will sometimes be sorted incorrectly, due to the conversation having an incorrect `highestSortNumber` value.
+  - Messages sent to a broadcast list may cause an invalid `lastMessage` object to be provided in any 1-on-1 conversations with users who are in that broadcast list.
+  - The `lastMessage` field will sometimes be missing or contain a message which is not the last message in that conversation.
+- Fix issue where after a user joins a private group, full conversation history was shown from before the user had joined.
+- Fix several issues around messages sent while the user has Do-Not-Disturb Auto-forwarding enabled
+
+### Known Issues
+
+The following issues are present in this SDK release and are planned to be fixed in an upcoming SDK or Platform release:
+
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - Messages sent by the current user sometimes do not appear in `conversation.timeline`.
+- In the `Conversation` model:
+  - `firstUnreadMessage` will have an incorrect value in some situations
+  - `isUnread` will have an incorrect value in some situations
+  - `highestSortNumber` will have an incorrect value in some situations
+  - `unreadMessageCount` will have an incorrect value in some situations
+
+### Documentation Updates
+
+- Add [Do Not Disturb](https://tigerconnect.github.io/js-sdk/quickstart/js/do-not-disturb) page which explains the different kinds of Do-Not-Disturb functionality that are available.
+
 ## [7.3.1] - 2019-09-30
 
 ### Overview
