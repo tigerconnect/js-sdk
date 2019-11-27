@@ -1,5 +1,47 @@
 # Change Log
 
+## [8.0.0] - TBD
+
+### General Changes
+
+- `conversations.selectConversation()`:
+  - The contract has been changed to return `Promise<Object>`, where Object contains these two fields:
+    - `addedMessages`: Number of items that were added to the Timeline
+    - `previousFirstUnreadMessage`: A message model representing the `firstUnreadMessage` before all messages in this conversation are marked as 'Read'.
+- If a message attachment without a name is downloaded, a default `name` of `"attachment"` will be provided.
+- If an attempt is made to upload metadata with non-string values, an error will be thrown. This is an improvement to the previous behavior of allowing the operation to happen, but having non-string values silently discarded by the platform.
+
+### `conversation:change` event removal
+
+- The `client.on('conversation:change', ...)` event has been removed.
+- The `conversation.on('change', ...)` event has also been removed.
+- Please use the following pattern instead: `client.models.Conversation.on('afterInject', (resource, conversation) => { /* code that uses `conversation` */ })`
+
+### Fixes
+
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - Significant performance improvements have been made. In most cases, unnecessary fetches of timeline when at the end of the conversation have been removed, in which case `itemsEstimate` will already be set to `0`.
+  - Fix issue where messages sent by the current user sometimes do not appear in `conversation.timeline`.
+- In `conversations.markAsRead()`:
+  - Improvements have been made to the speed at which messages will appear Read.
+- In the `Conversation` model:
+  - Fix issue where `firstUnreadMessage` will have an incorrect value in some situations.
+  - Fix issue where `isUnread` will have an incorrect value in some situations.
+  - Fix issue where `highestSortNumber` will have an incorrect value in some situations.
+  - Fix issue where `unreadMessageCount` will have an incorrect value in some situations.
+- In the `Organization` model:
+  - Fix issue where `lastIncomingMessageSortNumber` had an incorrect value in some situations.
+- `events.connect()`:
+  - Significant improvements have been made to stability of the EventSource connection.
+- Fix issue where `message.shouldEnsureRecipientStatus` would sometimes have an incorrect value of `false` after receiving an SSE event or downloading the timeline, which could cause message statuses to not be fetched when calling `ensureRecipientStatus()`.
+
+### Known Issues
+
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - If the user is at the very top of the conversation, and the last fetch of the timeline continuation happened to end on the very first item of the conversation, `itemsEstimate` may be `0`, which can trigger a one-time fetch in that direction to make sure that there aren't any remaining items. This case should be relatively rare compared to past SDK releases.
+- `conversations.markAsRead()`:
+  - In some cases, messages in certain conversations might not get marked as read. When this happens, messages might appear Read for a few seconds and then switch back after syncing the real values from the server. This is a platform issue and might potentially be fixed without need for an SDK release.
+
 ## [7.7.0] - 2019-10-24
 
 ### General Changes
