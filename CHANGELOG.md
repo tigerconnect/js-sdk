@@ -1,6 +1,6 @@
 # Change Log
 
-## [8.0.0] - TBD
+## [8.0.0] - 2019-12-02
 
 ### General Changes
 
