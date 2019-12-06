@@ -2,6 +2,11 @@
 
 ## [8.0.2] - 2019-12-04
 
+### General Changes
+
+- The contract for `typingStatus.startTyping()` has changed, and it is now required to pass `organizationId` as part of the 2nd `options` parameter. See https://tigerconnect.github.io/js-sdk/api/typingStatus/startTyping for details.
+- The contract for `typingStatus.stopTyping()` has changed, and it is now required to pass `organizationId` as part of the 2nd `options` parameter. See https://tigerconnect.github.io/js-sdk/api/typingStatus/stopTyping for details.
+
 ### Fixes
 
 - Fix a build issue that was causing incorrect minified code to be generated for the browser release, which was causing a `<random variable name> is not defined` error when instantiating the client.
