@@ -14,6 +14,7 @@
 ### Known Issues
 
 - In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - If the user joins a group and then receives more than a certain number unread bangs and messages, when they next select the group, sometimes not all messages will be fetched, if the first fetched item happens to be a bang.
   - If the user is at the very top of the conversation, and the last fetch of the timeline continuation happened to end on the very first item of the conversation, `itemsEstimate` might not be `0`, which can trigger a one-time fetch in that direction to make sure that there aren't any remaining items. This case should be relatively rare compared to past SDK releases.
 - `conversations.markAsRead()`:
   - In some cases, messages in certain conversations might not get marked as read. When this happens, messages might appear Read for a few seconds and then switch back after syncing the real values from the server. This is a platform issue and might potentially be fixed without need for an SDK release.
