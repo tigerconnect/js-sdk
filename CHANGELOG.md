@@ -4,7 +4,7 @@
 
 ### General Changes
 
-- [typing:change](https://tigerconnect.github.io/js-sdk/events/typing-change) 
+- [typing:change](https://tigerconnect.github.io/js-sdk/events/typing-change)
   - Change contract to include `contextId` and `contextType` parameters
 
 ### Fixes
@@ -18,7 +18,7 @@
   - Allow this to work without a preceding `conversations.findAll()`
 - `messages.sendToUser()`:
   - Fix an issue where sending a message to a new user resulted in an incorrect `conversation.lastMessage`
-  
+
 ## [8.0.2] - 2019-12-04
 
 ### General Changes
