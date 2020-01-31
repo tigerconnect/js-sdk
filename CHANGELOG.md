@@ -1,5 +1,24 @@
 # Change Log
 
+## [8.4.1] - 2020-01-31
+
+### General Changes
+
+- [typing:change](https://tigerconnect.github.io/js-sdk/events/typing-change) 
+  - Change contract to include `contextId` and `contextType` parameters
+
+### Fixes
+
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - Fix issue where the user joins a group and then receives more than a certain number unread bangs and messages, when they next select the group, sometimes not all messages will be fetched, if the first fetched item happens to be a bang.
+  - Fix issue where the user enters a forum or a group with `replayHistory = true`, reads all of the messages, leaves, and then rejoins, then only the very top (lowest `sort_number`) of the conversation will be fetched.
+- `conversations.markAsRead()`:
+  - Messages will now consistently get marked as Read.
+- `conversations.find()`:
+  - Allow this to work without a preceding `conversations.findAll()`
+- `messages.sendToUser()`:
+  - Fix an issue where sending a message to a new user resulted in an incorrect `conversation.lastMessage`
+  
 ## [8.0.2] - 2019-12-04
 
 ### General Changes
