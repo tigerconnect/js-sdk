@@ -1,5 +1,18 @@
 # Change Log
 
+## [9.8.1beta] - 2020-04-22
+
+### General Changes
+
+- Various bugfixes and performance improvements
+
+### Fixes
+
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - Fix issue where the conversation content was being fetched more than what was strictly necessary
+  - NOTE: If you would like to display a loading indicator in a particular direction if more content is available, please read the [explanation of the itemsEstimate continuation field in the introduction of the fetchTimeline docs](https://tigerconnect.github.io/js-sdk/api/conversations/fetchTimeline) for guidance on how to implement that correctly.
+- BETA: Fix issue where messages could be missing when sending many messages to and from users in a group in certain situations
+
 ## [8.4.1] - 2020-01-31
 
 ### General Changes
