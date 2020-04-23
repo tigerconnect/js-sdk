@@ -1,6 +1,6 @@
 # Change Log
 
-## [9.8.1beta] - 2020-04-22
+## [9.8.1beta1] - 2020-04-22
 
 ### General Changes
 
