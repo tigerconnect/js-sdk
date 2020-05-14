@@ -1,5 +1,20 @@
 # Change Log
 
+## [10.3.0] - 2020-05-13
+
+### General Changes
+
+- The generic `client.messages.forward()` function has been deprecated in favor of `forwardToUser()`, `forwardToGroup()`, etc. and will throw an error if an attempt is made to use it
+- The generic `client.messages.send()` function has been deprecated in favor of `sendToUser()`, `sendToGroup()`, etc. and will throw an error if an attempt is made to use it
+- Various bugfixes and performance improvements
+
+### Fixes
+
+- Fix issue where sending a message immediately after receiving other messages could cause all subsequent messages to be missing for up to 7 minutes
+- In `conversations.fetchTimeline()` and `conversations.selectConversation()`:
+  - Fix issue where the conversation content was being fetched more than what was strictly necessary
+  - NOTE: If you would like to display a loading indicator in a particular direction if more content is available, please read the [explanation of the itemsEstimate continuation field in the introduction of the fetchTimeline docs](https://tigerconnect.github.io/js-sdk/api/conversations/fetchTimeline) for guidance on how to implement that correctly.
+
 ## [8.4.1] - 2020-01-31
 
 ### General Changes
