@@ -1,5 +1,19 @@
 # Change Log
 
+## [10.8.1] - 2020-06-18
+
+### General Changes
+
+- The `User` model now has a `removedFromOrg` field, that if set to `true`, indicates that the user has been removed from all organizations.
+- Removed users whose names are not known will be given a `displayName` of `Removed User`.
+
+### Fixes
+
+- Fix an issue where `conversation.messages` would not be updated after a message was recalled or expired. As a sidenote: for most use-cases, we recommend using `conversation.timeline` instead, since its contents will be sorted, up-to-date on recipient status flags, and will better reflect the content fetched during `client.conversations.fetchTimeline()` calls.
+- Fix an issue where `conversation.lastMessage` was sometimes not set to the most up-to-date value.
+- Improve performance of `client.conversations.clearMessageStatuses`, which is especially noticeable when viewing conversations for groups that have a very large number of messages.
+- Various other bugfixes and performance improvements.
+
 ## [10.3.0] - 2020-05-13
 
 ### General Changes
