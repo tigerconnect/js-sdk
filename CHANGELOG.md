@@ -1,5 +1,17 @@
 # Change Log
 
+## [11.7.0beta1] - 2020-09-10
+
+### General Changes
+
+- Improved efficiency when creating groups with metadata using the SDK.
+- Improved responsiveness of `conversations.findAll()` when CStore is on and the user has a large roster with more than 200 items.
+- `messages.findAttachment()`: If an attachment cannot be located, return `null` instead of throwing an error.
+
+### Fixes
+
+- Fix an issue where a group that was created with metadata did not surface the metadata right away.
+
 ## [10.8.0] - 2020-06-18
 
 ### General Changes

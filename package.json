@@ -1,6 +1,6 @@
 {
   "name": "tigerconnect",
-  "version": "10.8.0",
+  "version": "11.7.0-beta1",
   "description": "JS (web and node) SDK for TigerConnect",
   "homepage": "https://tigerconnect.github.io/js-sdk/",
   "repository": "tigerconnect/js-sdk",
