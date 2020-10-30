@@ -1,5 +1,16 @@
 # Change Log
 
+## [12.4.0beta1] - 2020-10-30
+
+### General Changes
+
+- New function [messages.findAttachmentBlobAndUrl](https://tigerconnect.github.io/js-sdk/api/messages/findAttachmentBlobAndUrl) to efficiently retrieve both the attachment blob and its URL.
+
+### Fixes
+
+- Fix an issue where `conversations.fetchTimeline()` and `conversations.selectConversation()` were causing the timeline of previously downloaded conversations to be cleared unnecessarily.
+- Miscellaneous optimizations and improvements.
+
 ## [11.7.0] - 2020-09-18
 
 ### General Changes
