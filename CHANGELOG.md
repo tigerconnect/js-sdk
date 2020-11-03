@@ -4,7 +4,7 @@
 
 ### General Changes
 
-- New function [messages.findAttachmentBlobAndUrl](https://tigerconnect.github.io/js-sdk/api/messages/findAttachmentBlobAndUrl) to efficiently retrieve both the attachment blob and its URL.
+- New function [messages.downloadAttachmentBlobAndUrl](https://tigerconnect.github.io/js-sdk/api/messages/downloadAttachmentBlobAndUrl) to efficiently retrieve both the attachment blob and its URL.
 
 ### Fixes
 
