@@ -1,5 +1,11 @@
 # Change Log
 
+## [12.5.0beta1] - 2020-11-06
+
+### General Changes
+
+- New CallsService for VoIP Calling. Demo app available [here](https://github.com/tigerconnect/web-calling-demo). Documentation to be added soon.
+
 ## [12.4.0beta1] - 2020-10-30
 
 ### General Changes
