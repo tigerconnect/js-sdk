@@ -1,5 +1,15 @@
 # Change Log
 
+## [12.5.0beta3] - 2020-11-10
+
+### General Changes
+
+- Updates to `client.calls` service
+
+### Fixes
+
+- Add `client.calls` logic necessary for compatibility with [Web Calling Demo](https://github.com/tigerconnect/web-calling-demo)
+
 ## [12.5.0beta2] - 2020-11-10
 
 ### General Changes
