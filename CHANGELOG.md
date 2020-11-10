@@ -4,16 +4,6 @@
 
 ### General Changes
 
-- Updates to `client.calls` service
-
-### Fixes
-
-- Add `client.calls` logic necessary for compatibility with [Web Calling Demo](https://github.com/tigerconnect/web-calling-demo)
-
-## [12.5.0beta2] - 2020-11-10
-
-### General Changes
-
 - New `client.calls` service for VoIP Calling. Demo app available [here](https://github.com/tigerconnect/web-calling-demo). Documentation to be added soon.
 - New function [messages.downloadAttachmentBlobAndUrl](https://tigerconnect.github.io/js-sdk/api/messages/downloadAttachmentBlobAndUrl) to efficiently retrieve both the attachment blob and its URL.
 
