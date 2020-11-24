@@ -1,6 +1,6 @@
 # Change Log
 
-## [12.5.0beta2] - 2020-11-10
+## [12.6.0beta1] - 2020-11-24
 
 ### General Changes
 
@@ -10,6 +10,7 @@
 ### Fixes
 
 - Fix build issue that was causing the web bundle to not load.
+- Fix an issue where the global instance of lodash was being modified after loading the Web bundle.
 - Fix an issue where `conversations.fetchTimeline()` and `conversations.selectConversation()` were causing the timeline of previously downloaded conversations to be cleared unnecessarily.
 - Miscellaneous optimizations and improvements.
 
