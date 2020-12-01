@@ -1,5 +1,19 @@
 # Change Log
 
+## [12.6.0] - 2020-11-30
+
+### General Changes
+
+- New `client.calls` service for VoIP Calling. Demo app available [here](https://github.com/tigerconnect/web-calling-demo). Documentation to be added soon.
+- New function [messages.downloadAttachmentBlobAndUrl](https://tigerconnect.github.io/js-sdk/api/messages/downloadAttachmentBlobAndUrl) to efficiently retrieve both the attachment blob and its URL.
+
+### Fixes
+
+- Fix build issue that was causing the web bundle to not load.
+- Fix an issue where the global instance of lodash was being modified after loading the Web bundle.
+- Fix an issue where `conversations.fetchTimeline()` and `conversations.selectConversation()` were causing the timeline of previously downloaded conversations to be cleared unnecessarily.
+- Miscellaneous optimizations and improvements.
+
 ## [11.7.0] - 2020-09-18
 
 ### General Changes
