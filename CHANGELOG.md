@@ -1,5 +1,11 @@
 # Change Log
 
+## [12.10.0] - 2021-01-05
+
+### Performance Improvements
+
+- `conversations.findAll()`: The conversation target and group members will no longer be downloaded for every conversation. This can greatly improve performance for users with large rosters.
+
 ## [12.6.0] - 2020-11-30
 
 ### General Changes

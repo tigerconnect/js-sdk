@@ -1,6 +1,6 @@
 {
   "name": "tigerconnect",
-  "version": "12.6.0",
+  "version": "12.10.0",
   "description": "JS (web and node) SDK for TigerConnect",
   "homepage": "https://tigerconnect.github.io/js-sdk/",
   "repository": "tigerconnect/js-sdk",
@@ -18,7 +18,7 @@
     "sdk"
   ],
   "lint-staged": {
-    "*": [
+    "src/**/*": [
       "pretty-quick --staged"
     ]
   },
@@ -64,23 +64,6 @@
     "superagent-prefix": "0.0.2",
     "uuid": "^3.0.0",
     "visibilityjs": "^2.0.2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "prettier"
-    ],
-    "globals": {
-      "__SDK_VERSION__": "readonly",
-      "__DEV__": "readonly"
-    },
-    "plugins": [
-      "react",
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": "error"
-    }
   },
   "prettier": {
     "arrowParens": "always",
