@@ -1,5 +1,11 @@
 # Change Log
 
+## [13.7.0] - 2021-03-18
+
+### Fixes
+
+- `groups.find()`: Errors like `PermissionDeniedError` and `NotFoundError` will now be properly thrown as different kinds of errors instead of always being `NotFoundError`.
+
 ## [12.10.0] - 2021-01-05
 
 ### Performance Improvements

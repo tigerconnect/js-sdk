@@ -1,6 +1,6 @@
 {
   "name": "tigerconnect",
-  "version": "12.10.0",
+  "version": "13.7.0",
   "description": "JS (web and node) SDK for TigerConnect",
   "main": "tigerconnect-sdk-web.min.js",
   "authors": [
